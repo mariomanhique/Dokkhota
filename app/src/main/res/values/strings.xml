@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Dokkhota</string>
+    <string name="home">Home</string>
+    <string name="exam">Exam</string>
+    <string name="analytics">Analytics</string>
+    <string name="profile">Profile</string>
+</resources>
