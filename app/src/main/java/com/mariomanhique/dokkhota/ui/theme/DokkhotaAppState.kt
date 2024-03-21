@@ -12,10 +12,10 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
 import androidx.tracing.trace
 import com.mariomanhique.dokkhota.navigation.TopLevelDestination
-import com.mariomanhique.dokkhota.presentation.screens.analytics.navigation.examRoute
-import com.mariomanhique.dokkhota.presentation.screens.analytics.navigation.navigateToExam
-import com.mariomanhique.dokkhota.presentation.screens.exam.navigation.analyticsRoute
-import com.mariomanhique.dokkhota.presentation.screens.exam.navigation.navigateToAnalytics
+import com.mariomanhique.dokkhota.presentation.screens.analytics.navigation.analyticsRoute
+import com.mariomanhique.dokkhota.presentation.screens.analytics.navigation.navigateToAnalytics
+import com.mariomanhique.dokkhota.presentation.screens.exam.navigation.examRoute
+import com.mariomanhique.dokkhota.presentation.screens.exam.navigation.navigateToExam
 import com.mariomanhique.dokkhota.presentation.screens.home.navigation.homeRoute
 import com.mariomanhique.dokkhota.presentation.screens.home.navigation.navigateToHome
 import com.mariomanhique.dokkhota.presentation.screens.profile.navigation.navigateToProfile
@@ -97,8 +97,8 @@ class DokkhotaAppState(
             when(topLevelDestination){
                 TopLevelDestination.HOME -> navController.navigateToHome(topLevelNavOptions)
                 TopLevelDestination.PROFILE -> navController.navigateToProfile(topLevelNavOptions)
-                TopLevelDestination.ANALYTICS -> navController.navigateToAnalytics()
-                TopLevelDestination.EXAM -> navController.navigateToExam()
+                TopLevelDestination.ANALYTICS -> navController.navigateToAnalytics(topLevelNavOptions)
+                TopLevelDestination.EXAM -> navController.navigateToExam(topLevelNavOptions)
             }
         }
 

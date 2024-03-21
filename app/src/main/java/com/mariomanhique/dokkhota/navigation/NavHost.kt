@@ -4,8 +4,8 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.runtime.Composable
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
-import com.mariomanhique.dokkhota.presentation.screens.analytics.navigation.examRoute
-import com.mariomanhique.dokkhota.presentation.screens.exam.navigation.analyticsRoute
+import com.mariomanhique.dokkhota.presentation.screens.analytics.navigation.analyticsRoute
+import com.mariomanhique.dokkhota.presentation.screens.exam.navigation.examRoute
 import com.mariomanhique.dokkhota.presentation.screens.home.navigation.homeRoute
 import com.mariomanhique.dokkhota.presentation.screens.profile.ProfileViewModel
 import com.mariomanhique.dokkhota.presentation.screens.profile.navigation.profileRoute
@@ -43,6 +43,7 @@ fun NavHost(
 //        })
 //
         homeRoute()
+
 
         examRoute()
 
