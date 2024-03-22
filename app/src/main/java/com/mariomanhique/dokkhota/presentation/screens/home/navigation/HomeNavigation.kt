@@ -11,7 +11,7 @@ import com.mariomanhique.dokkhota.presentation.screens.home.HomeScreen
 import com.mariomanhique.dokkhota.presentation.screens.home.HomeViewModel
 
 
-const val homeRoute = "home_route"
+const val homeRoute = "homeRoute"
 fun NavController.navigateToHome(navOptions: NavOptions? = null) {
     this.navigate(homeRoute, navOptions)
 }
