@@ -29,9 +29,6 @@ import java.time.ZonedDateTime
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun HomeScreen(
-    dateIsSelected: Boolean,
-    onDateSelected: (ZonedDateTime) -> Unit,
-    onDateReset: () -> Unit,
 ){
 
     var padding by remember { mutableStateOf(PaddingValues()) }

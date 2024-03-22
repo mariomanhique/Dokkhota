@@ -24,11 +24,6 @@ fun NavGraphBuilder.homeRoute(
 
 
         HomeScreen(
-            dateIsSelected= viewModel.dateIsSelected,
-            onDateSelected = {
-            },
-            onDateReset = {
-            },
             )
 
 

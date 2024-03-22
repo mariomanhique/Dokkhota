@@ -68,7 +68,6 @@ class ProfileViewModel @Inject constructor(
             return
         }
         viewModelScope.launch {
-//            uploadImageToFirebase()
             profileRepository
                 .updateUsername(username)
         }

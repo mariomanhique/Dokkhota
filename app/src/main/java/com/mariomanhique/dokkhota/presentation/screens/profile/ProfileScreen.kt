@@ -15,9 +15,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun ProfileScreen(
-    modifier: Modifier = Modifier,
-    onDeleteClicked: (Boolean) -> Unit,
-    onLogoutClicked: (Boolean) -> Unit,
+
     profileViewModel: ProfileViewModel,
 ){
 
@@ -39,31 +37,7 @@ fun ProfileScreen(
             }
         ) {
             ProfileContent(
-                imageProfile = profileState.image.value.image,
-                username = username,
-                onSelectImage = {imageUrl->
-                    val type = context.contentResolver.getType(imageUrl)?.split("/")?.last() ?: "jpg"
-                    profileViewModel.addImage(
-                        image = imageUrl,
-                        imageType = type
-                    )
-                },
-                onProfileSaved = {
-                    profileViewModel.updateUsername(
-                        username = username
-                    )
-                },
-                onValueChanged = {
-                    username = it
-                },
-                onDeleteClicked = onDeleteClicked,
-                onLogoutClicked = onLogoutClicked,
-                onImageUpdated = {
-                    profileViewModel.updateImageProfile(
-                       profileState.image.value.remoteImagePath
-                    )
-                },
-                paddingValues = it
+
             )
         }
     }

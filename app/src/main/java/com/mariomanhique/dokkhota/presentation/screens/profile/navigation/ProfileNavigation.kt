@@ -34,13 +34,6 @@ fun NavGraphBuilder.profileRoute(
 
         ProfileScreen(
             profileViewModel = profileViewModel,
-            onDeleteClicked = {
-                deleteAllDialogOpened = it
-                Toast.makeText(context, "$it", Toast.LENGTH_SHORT).show()
-            },
-            onLogoutClicked = {
-                signOutDialogState = it
-            },
         )
 
 //        DisplayAlertDialog(
