@@ -26,18 +26,22 @@ import com.mariomanhique.dokkhota.R
 
 @Composable
 fun ExamsListScreen(
-    onExamClicked: (String) -> Unit,
+    onExamClicked: (String, String) -> Unit,
     examsListViewModel: ExamsListViewModel = hiltViewModel()
 ){
 
 
     val examsList by examsListViewModel.exams.collectAsStateWithLifecycle()
 
+    val category by examsListViewModel.category.collectAsStateWithLifecycle()
+
     examsList?.let {
-        ExamsListContent(onExamClicked = onExamClicked, examsCount = it)
+        ExamsListContent(onExamClicked = {examNr->
+            category?.let { category -> onExamClicked(examNr, category) }
+        }, examsCount = it)
     }
 
-    Log.d("Exams", "ExamsListScreen: $examsList")
+    Log.d("Exams", "ExamsListScreen: $examsList + $category")
 
 
 }
@@ -54,7 +58,8 @@ fun ExamsListContent(
       items(items = examsCount){
           ExamCard(
               onExamClicked = onExamClicked,
-              examN = it)
+              examN = it
+          )
       }
 
   }

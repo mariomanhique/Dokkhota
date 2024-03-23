@@ -25,16 +25,23 @@ class ExamsListViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-
-            savedStateHandle.getStateFlow<String?>(
+           savedStateHandle.getStateFlow<String?>(
                 key = CATEGORY_ARG,
                 initialValue = null
             ).collect{
                 Log.d("ID", ": $it ")
             }
-
         }
     }
+
+    val category = savedStateHandle.getStateFlow<String?>(
+        key = CATEGORY_ARG,
+        initialValue = null
+    ).stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5_000),
+        initialValue = null,
+    )
 
     val exams = savedStateHandle.getStateFlow<String?>(
         key = CATEGORY_ARG,
@@ -50,7 +57,5 @@ class ExamsListViewModel @Inject constructor(
         started = SharingStarted.WhileSubscribed(5_000),
         initialValue = null,
     )
-
-
 
 }

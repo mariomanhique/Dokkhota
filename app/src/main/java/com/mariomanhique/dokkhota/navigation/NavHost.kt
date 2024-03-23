@@ -58,16 +58,18 @@ fun NavHost(
             },
             nestedGraph = {
                 examsListRoute(
-                  onExamClicked = {
-
+                  onExamClicked = {examNr, category->
+                      navController.navigateToPlay(examNr, category)
                   }
                 )
+
+                playRoute()
+
             }
         )
 
         analyticsRoute()
 
-        playRoute()
 
         profileRoute(
             profileViewModel = profileViewModel,

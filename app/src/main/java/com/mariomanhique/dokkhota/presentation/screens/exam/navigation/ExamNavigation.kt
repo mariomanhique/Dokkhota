@@ -45,7 +45,7 @@ fun NavGraphBuilder.examGraph(
 }
 
 fun NavGraphBuilder.examsListRoute(
-    onExamClicked: (String) -> Unit,
+    onExamClicked: (String, String) -> Unit,
 ){
     composable(route = "$examsListRoute/{$CATEGORY_ARG}",
         arguments = listOf(navArgument(name = CATEGORY_ARG){

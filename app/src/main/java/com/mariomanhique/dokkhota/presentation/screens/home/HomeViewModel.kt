@@ -71,7 +71,7 @@ class HomeViewModel @Inject constructor(
    ){
         viewModelScope.launch {
             examsRepository
-                .getExamsByCategory(
+                .getExamQuestionsByCategory(
                     category = category,
                     examNr = examNr
                 )

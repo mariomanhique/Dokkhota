@@ -1,10 +1,14 @@
 package com.mariomanhique.dokkhota.presentation.screens.playScreen
 
+import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.calculateEndPadding
+import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
@@ -22,30 +26,56 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mariomanhique.dokkhota.data.repository.examsRepository.Questions
 import com.mariomanhique.dokkhota.model.Question
+import com.mariomanhique.dokkhota.model.Result
 
 @Composable
 fun PlayScreen(
     paddingValues: PaddingValues,
+    playViewModel: PlayViewModel = hiltViewModel()
 ){
-    PlayContent(
-        paddingValues = paddingValues
-    )
+
+    val questions by playViewModel.exams.collectAsStateWithLifecycle()
+
+    when(questions){
+        is Result.Success ->{
+            Log.d("Questions", "Play: ${(questions as Result.Success<List<Question>>).data}")
+            PlayContent(
+                questions = (questions as Result.Success<List<Question>>).data,
+                paddingValues = paddingValues,
+            )
+        }
+        else -> {
+
+        }
+    }
 }
 
 @Composable
 fun PlayContent(
-     questions: List<Question> = listOf(Question(), Question()),
+     questions: List<Question>,
      paddingValues: PaddingValues
 ){
 
  LazyColumn(
+     modifier = Modifier
+         .padding(horizontal = 24.dp)
+         .navigationBarsPadding()
+         .padding(top = paddingValues.calculateTopPadding())
+         .padding(bottom = paddingValues.calculateBottomPadding())
+         .padding(start = paddingValues.calculateStartPadding(LayoutDirection.Ltr))
+         .padding(end = paddingValues.calculateEndPadding(LayoutDirection.Ltr)),
      contentPadding = paddingValues
  ) {
      items(items = questions){
-         QACard()
+         QACard(
+             choices = it.choices
+         )
      }
  }
 
@@ -54,7 +84,7 @@ fun PlayContent(
 
 @Composable
 fun QACard(
-    choices: List<String> = listOf("Chocie_1", "Choice_2", "Choice_3", "Choice_4"),
+    choices: List<String>,
 
 ){
 

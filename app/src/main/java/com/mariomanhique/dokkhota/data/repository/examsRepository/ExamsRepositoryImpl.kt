@@ -32,7 +32,27 @@ class ExamsRepositoryImpl @Inject constructor(): ExamsRepository {
         }
     }
 
-    override suspend fun getExamsByCategory(
+    override suspend fun getAll(): List<Map<String, Any>> {
+        val db = FirebaseFirestore.getInstance()
+        val categoriesCollection = db.collection("categories")
+
+        val allExams = mutableListOf<Map<String, Any>>()
+
+        val categoryDocuments = categoriesCollection.get().await()
+        for (categoryDocument in categoryDocuments) {
+            val examsCollection = categoryDocument.reference.collection("exams")
+            val examDocuments = examsCollection.get().await()
+            for (examDocument in examDocuments) {
+                val examData = examDocument.data
+                allExams.add(examData)
+            }
+        }
+
+        return allExams
+
+    }
+
+    override suspend fun getExamQuestionsByCategory(
             category: String,
             examNr: String,
     ): Flow<Questions> {
