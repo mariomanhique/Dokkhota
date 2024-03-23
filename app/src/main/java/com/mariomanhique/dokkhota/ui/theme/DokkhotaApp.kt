@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
@@ -22,9 +23,14 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -37,9 +43,11 @@ import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hierarchy
 import com.mariomanhique.dokkhota.navigation.NavHost
 import com.mariomanhique.dokkhota.navigation.TopLevelDestination
+import com.mariomanhique.dokkhota.presentation.components.HomeTopBar
+import com.mariomanhique.dokkhota.presentation.screens.menu.MenuSheet
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
-@OptIn(ExperimentalComposeUiApi::class)
+@OptIn(ExperimentalComposeUiApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun DokkhotaApp(
     windowSizeClass: WindowSizeClass,
@@ -50,7 +58,22 @@ fun DokkhotaApp(
 
     val snackbarHostState = remember { SnackbarHostState() }
     val destination = appState.currentTopLevelDestination
+    val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
+    var isSheetOpen by rememberSaveable {
+        mutableStateOf(false)
+    }
 
+
+    if (isSheetOpen){
+        MenuSheet(
+            onSheetDismissed = {
+                isSheetOpen = false
+            },
+            onSignedOut = {
+
+            }
+        )
+    }
 
     Scaffold(
         modifier = Modifier
@@ -65,6 +88,19 @@ fun DokkhotaApp(
         contentColor = MaterialTheme.colorScheme.onBackground,
         contentWindowInsets = WindowInsets(0, 0, 0, 0),
         snackbarHost = { SnackbarHost(snackbarHostState) },
+        topBar = {
+            if (
+                destination != null
+            ){
+                HomeTopBar(
+                    title = destination.titleTextId,
+                    scrollBehavior = scrollBehavior,
+                    onMenuClicked = {
+                        isSheetOpen = true
+                    }
+                )
+            }
+        },
         bottomBar = {
             if (appState.shouldShowBottomBar) {
                 if (destination != null) {
@@ -72,7 +108,7 @@ fun DokkhotaApp(
                         destinations = appState.topLevelDestinations,
                         onNavigateToDestination = appState::navigateToTopLevelDestination,
                         currentDestination = appState.currentDestination,
-                        modifier = Modifier.testTag("DiaryBottomBar"),
+                        modifier = Modifier.testTag("DokkhotaBottomBar"),
                     )
                 }
             }

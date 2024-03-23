@@ -15,13 +15,13 @@ import com.mariomanhique.dokkhota.navigation.TopLevelDestination
 import com.mariomanhique.dokkhota.presentation.screens.analytics.navigation.analyticsRoute
 import com.mariomanhique.dokkhota.presentation.screens.analytics.navigation.navigateToAnalytics
 import com.mariomanhique.dokkhota.presentation.screens.exam.navigation.examRoute
-import com.mariomanhique.dokkhota.presentation.screens.exam.navigation.navigateToExam
+import com.mariomanhique.dokkhota.presentation.screens.exam.navigation.examsListRoute
+import com.mariomanhique.dokkhota.presentation.screens.exam.navigation.navigateToExamsGraph
 import com.mariomanhique.dokkhota.presentation.screens.home.navigation.homeRoute
 import com.mariomanhique.dokkhota.presentation.screens.home.navigation.navigateToHome
 import com.mariomanhique.dokkhota.presentation.screens.profile.navigation.navigateToProfile
 import com.mariomanhique.dokkhota.presentation.screens.profile.navigation.profileRoute
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.SharingStarted
 
 
 @Composable
@@ -53,7 +53,7 @@ class DokkhotaAppState(
     val currentTopLevelDestination: TopLevelDestination?
         @Composable get() = when (currentDestination?.route) {
             homeRoute -> TopLevelDestination.HOME
-            examRoute -> TopLevelDestination.EXAM
+            examRoute, examsListRoute -> TopLevelDestination.EXAM
             analyticsRoute -> TopLevelDestination.ANALYTICS
             profileRoute -> TopLevelDestination.PROFILE
             else -> null
@@ -98,10 +98,9 @@ class DokkhotaAppState(
                 TopLevelDestination.HOME -> navController.navigateToHome(topLevelNavOptions)
                 TopLevelDestination.PROFILE -> navController.navigateToProfile(topLevelNavOptions)
                 TopLevelDestination.ANALYTICS -> navController.navigateToAnalytics(topLevelNavOptions)
-                TopLevelDestination.EXAM -> navController.navigateToExam(topLevelNavOptions)
+                TopLevelDestination.EXAM -> navController.navigateToExamsGraph(topLevelNavOptions)
             }
         }
-
 
     }
 

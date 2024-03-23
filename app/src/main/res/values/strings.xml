@@ -4,4 +4,6 @@
     <string name="exam">Exam</string>
     <string name="analytics">Analytics</string>
     <string name="profile">Profile</string>
+    <string name="menu">Menu</string>
+    <string name="chooseAction">Choose</string>
 </resources>

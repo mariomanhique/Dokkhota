@@ -5,6 +5,5 @@ import androidx.compose.runtime.Composable
 
 @Composable
 fun AnalyticsScreen(){
-    Text(text = "Analytics")
 
 }

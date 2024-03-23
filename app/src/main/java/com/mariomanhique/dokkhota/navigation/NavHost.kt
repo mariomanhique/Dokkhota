@@ -5,8 +5,13 @@ import androidx.compose.runtime.Composable
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import com.mariomanhique.dokkhota.presentation.screens.analytics.navigation.analyticsRoute
+import com.mariomanhique.dokkhota.presentation.screens.exam.navigation.examGraph
 import com.mariomanhique.dokkhota.presentation.screens.exam.navigation.examRoute
+import com.mariomanhique.dokkhota.presentation.screens.exam.navigation.examsListRoute
+import com.mariomanhique.dokkhota.presentation.screens.exam.navigation.navigateToExamsList
 import com.mariomanhique.dokkhota.presentation.screens.home.navigation.homeRoute
+import com.mariomanhique.dokkhota.presentation.screens.playScreen.navigation.navigateToPlay
+import com.mariomanhique.dokkhota.presentation.screens.playScreen.navigation.playRoute
 import com.mariomanhique.dokkhota.presentation.screens.profile.ProfileViewModel
 import com.mariomanhique.dokkhota.presentation.screens.profile.navigation.profileRoute
 import com.mariomanhique.dokkhota.ui.theme.DokkhotaAppState
@@ -42,15 +47,31 @@ fun NavHost(
 //            navController.navigateToSignIn()
 //        })
 //
-        homeRoute()
+        homeRoute(
+            paddingValues = paddingValues
+        )
 
 
-        examRoute()
+        examGraph(
+            onCategoryClicked = {
+                navController.navigateToExamsList(it)
+            },
+            nestedGraph = {
+                examsListRoute(
+                  onExamClicked = {
+
+                  }
+                )
+            }
+        )
 
         analyticsRoute()
 
+        playRoute()
+
         profileRoute(
-            profileViewModel = profileViewModel
+            profileViewModel = profileViewModel,
+            paddingValues = paddingValues
         )
     }
 }

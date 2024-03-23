@@ -15,6 +15,7 @@ class ProfileRepositoryImpl @Inject constructor(
     private val firestore: FirebaseFirestore
 ): ProfileRepository {
     private val rf = firestore.collection("profile")
+
     private lateinit var updateUser: RequestState<String>
 
     override fun getProfile(): Flow<UserData?> {

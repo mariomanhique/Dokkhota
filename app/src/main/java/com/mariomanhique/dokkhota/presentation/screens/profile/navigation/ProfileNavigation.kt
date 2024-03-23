@@ -1,6 +1,7 @@
 package com.mariomanhique.dokkhota.presentation.screens.profile.navigation
 
 import android.widget.Toast
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -23,6 +24,7 @@ fun NavController.navigateToProfile(navOptions: NavOptions?=null){
 }
 fun NavGraphBuilder.profileRoute(
     profileViewModel: ProfileViewModel,
+    paddingValues: PaddingValues
 ){
 
     composable(route = profileRoute){
@@ -34,6 +36,7 @@ fun NavGraphBuilder.profileRoute(
 
         ProfileScreen(
             profileViewModel = profileViewModel,
+            paddingValues = paddingValues
         )
 
 //        DisplayAlertDialog(

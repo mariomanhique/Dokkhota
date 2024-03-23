@@ -47,6 +47,16 @@ fun HomeContentLandscape(
 
 }
 
+
+@Composable
+fun BCSCard(
+    modifier: Modifier = Modifier
+){
+
+
+
+}
+
 @Composable
 fun EmptyPage(
     title: String = "Empty Diary",
@@ -75,3 +85,4 @@ fun EmptyPage(
         )
     }
 }
+
