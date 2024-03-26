@@ -21,6 +21,7 @@ import com.mariomanhique.dokkhota.presentation.screens.home.navigation.homeRoute
 import com.mariomanhique.dokkhota.presentation.screens.home.navigation.navigateToHome
 import com.mariomanhique.dokkhota.presentation.screens.profile.navigation.navigateToProfile
 import com.mariomanhique.dokkhota.presentation.screens.profile.navigation.profileRoute
+import com.mariomanhique.dokkhota.util.Constants.CATEGORY_ARG
 import kotlinx.coroutines.CoroutineScope
 
 
@@ -53,7 +54,7 @@ class DokkhotaAppState(
     val currentTopLevelDestination: TopLevelDestination?
         @Composable get() = when (currentDestination?.route) {
             homeRoute -> TopLevelDestination.HOME
-            examRoute, examsListRoute -> TopLevelDestination.EXAM
+            examRoute, "$examsListRoute/{$CATEGORY_ARG}" -> TopLevelDestination.EXAM
             analyticsRoute -> TopLevelDestination.ANALYTICS
             profileRoute -> TopLevelDestination.PROFILE
             else -> null

@@ -17,7 +17,11 @@ fun NavController.navigateToPlay(examNr: String, category: String){
     navigate("$playRoute/$examNr-$category")
 }
 
-fun NavGraphBuilder.playRoute(){
+fun NavGraphBuilder.playRoute(
+    onBackToHomeClicked: () -> Unit,
+    popBackStack: () -> Unit,
+
+){
     composable(
         "$playRoute/{$EXAM_NUMBER_ARG}",
         arguments = listOf(navArgument(name = Constants.EXAM_NUMBER_ARG){
@@ -26,7 +30,9 @@ fun NavGraphBuilder.playRoute(){
         })
     ){
         PlayScreen(
-            paddingValues = PaddingValues()
+            paddingValues = PaddingValues(),
+            onBackToHomeClicked = onBackToHomeClicked,
+            popBackStack = popBackStack
         )
     }
 }

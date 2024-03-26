@@ -1,5 +1,6 @@
 package com.mariomanhique.dokkhota.presentation.screens.exam.navigation
 
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
@@ -29,7 +30,8 @@ fun NavController.navigateToExamsList(category: String){
 
 fun NavGraphBuilder.examGraph(
     onCategoryClicked: (String) -> Unit,
-    nestedGraph: NavGraphBuilder.() -> Unit
+    nestedGraph: NavGraphBuilder.() -> Unit,
+    paddingValues: PaddingValues
 ){
 
     navigation(
@@ -37,7 +39,8 @@ fun NavGraphBuilder.examGraph(
         startDestination = examRoute){
         composable(route = examRoute){
             ExamScreen(
-                onCategoryClicked = onCategoryClicked
+                onCategoryClicked = onCategoryClicked,
+                paddingValues = paddingValues
             )
         }
         nestedGraph()
@@ -45,6 +48,7 @@ fun NavGraphBuilder.examGraph(
 }
 
 fun NavGraphBuilder.examsListRoute(
+    paddingValues: PaddingValues,
     onExamClicked: (String, String) -> Unit,
 ){
     composable(route = "$examsListRoute/{$CATEGORY_ARG}",
@@ -54,6 +58,7 @@ fun NavGraphBuilder.examsListRoute(
         })
         ){
         ExamsListScreen(
+           paddingValues = paddingValues ,
             onExamClicked = onExamClicked
         )
     }

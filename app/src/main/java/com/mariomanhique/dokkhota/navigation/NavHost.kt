@@ -10,6 +10,7 @@ import com.mariomanhique.dokkhota.presentation.screens.exam.navigation.examRoute
 import com.mariomanhique.dokkhota.presentation.screens.exam.navigation.examsListRoute
 import com.mariomanhique.dokkhota.presentation.screens.exam.navigation.navigateToExamsList
 import com.mariomanhique.dokkhota.presentation.screens.home.navigation.homeRoute
+import com.mariomanhique.dokkhota.presentation.screens.home.navigation.navigateToHome
 import com.mariomanhique.dokkhota.presentation.screens.playScreen.navigation.navigateToPlay
 import com.mariomanhique.dokkhota.presentation.screens.playScreen.navigation.playRoute
 import com.mariomanhique.dokkhota.presentation.screens.profile.ProfileViewModel
@@ -53,17 +54,23 @@ fun NavHost(
 
 
         examGraph(
+            paddingValues = paddingValues,
             onCategoryClicked = {
                 navController.navigateToExamsList(it)
             },
             nestedGraph = {
                 examsListRoute(
+                    paddingValues = paddingValues,
                   onExamClicked = {examNr, category->
                       navController.navigateToPlay(examNr, category)
                   }
                 )
-
-                playRoute()
+                playRoute(
+                    onBackToHomeClicked = {
+                        appState.navigateToTopLevelDestination(TopLevelDestination.HOME)
+                    },
+                    popBackStack = navController::popBackStack
+                )
 
             }
         )

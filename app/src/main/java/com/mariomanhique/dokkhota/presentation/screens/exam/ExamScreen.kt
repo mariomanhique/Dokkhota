@@ -2,11 +2,16 @@ package com.mariomanhique.dokkhota.presentation.screens.exam
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.calculateEndPadding
+import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.paddingFromBaseline
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -15,6 +20,7 @@ import androidx.compose.material.icons.automirrored.filled.ArrowForwardIos
 import androidx.compose.material.icons.filled.ArrowForwardIos
 import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -22,7 +28,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.capitalize
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
@@ -34,6 +43,7 @@ import java.util.Locale
 fun ExamScreen(
     onCategoryClicked: (String) -> Unit,
     examsViewModel: ExamsViewModel = hiltViewModel(),
+    paddingValues: PaddingValues
 ){
     
     val categories by examsViewModel.categories.collectAsStateWithLifecycle()
@@ -42,7 +52,8 @@ fun ExamScreen(
     if (categories.isNotEmpty()){
         ExamContent(
             categories = categories,
-            onCategoryClicked = onCategoryClicked
+            onCategoryClicked = onCategoryClicked,
+            paddingValues = paddingValues
         )
     }
     
@@ -52,14 +63,29 @@ fun ExamScreen(
 fun ExamContent(
     categories: List<String>,
     onCategoryClicked: (String) -> Unit,
+    paddingValues: PaddingValues
 ){
     LazyColumn(
-        modifier = Modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.Center,
+        modifier = Modifier.fillMaxSize()
+            .padding(horizontal = 24.dp)
+            .navigationBarsPadding()
+            .padding(top = paddingValues.calculateTopPadding())
+            .padding(bottom = paddingValues.calculateBottomPadding())
+            .padding(start = paddingValues.calculateStartPadding(LayoutDirection.Ltr))
+            .padding(end = paddingValues.calculateEndPadding(LayoutDirection.Ltr)),
+//        verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         item {
-            Text(text = "CATEGORIES")
+            Text(
+                modifier = Modifier.paddingFromBaseline(top = 20.dp, bottom = 60.dp),
+                text = "CATEGORIES",
+                style = MaterialTheme.typography.titleLarge.copy(
+                    fontSize = 40.sp
+                ),
+//                fontWeight = FontWeight.ExtraBold,
+                )
+
         }
         
         items(items = categories){category->
@@ -108,7 +134,10 @@ fun CategoryCard(
                 modifier = Modifier.weight(0.2f),
             ) {
              Text(
-                 text = category
+                 text = category,
+                 style = MaterialTheme.typography.bodyLarge.copy(
+                     fontSize = 20.sp
+                 )
              )
             }
 
