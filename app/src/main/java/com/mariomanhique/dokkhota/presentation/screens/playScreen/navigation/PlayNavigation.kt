@@ -19,6 +19,7 @@ fun NavController.navigateToPlay(examNr: String, category: String){
 
 fun NavGraphBuilder.playRoute(
     onBackToHomeClicked: () -> Unit,
+    navigateToSignIn: () -> Unit,
     popBackStack: () -> Unit,
 
 ){
@@ -32,7 +33,8 @@ fun NavGraphBuilder.playRoute(
         PlayScreen(
             paddingValues = PaddingValues(),
             onBackToHomeClicked = onBackToHomeClicked,
-            popBackStack = popBackStack
+            popBackStack = popBackStack,
+            navigateToSignIn = navigateToSignIn
         )
     }
 }

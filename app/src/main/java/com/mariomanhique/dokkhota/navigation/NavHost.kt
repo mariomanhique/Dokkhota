@@ -4,7 +4,11 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.runtime.Composable
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
+import com.mariomanhique.africanpages.presentation.screens.authentication.signUp.navigation.navigateToSignUp
+import com.mariomanhique.africanpages.presentation.screens.authentication.signUp.navigation.signUpRoute
 import com.mariomanhique.dokkhota.presentation.screens.analytics.navigation.analyticsRoute
+import com.mariomanhique.dokkhota.presentation.screens.authentication.signIn.navigation.navigateToSignIn
+import com.mariomanhique.dokkhota.presentation.screens.authentication.signIn.navigation.signInRoute
 import com.mariomanhique.dokkhota.presentation.screens.exam.navigation.examGraph
 import com.mariomanhique.dokkhota.presentation.screens.exam.navigation.examRoute
 import com.mariomanhique.dokkhota.presentation.screens.exam.navigation.examsListRoute
@@ -69,6 +73,7 @@ fun NavHost(
                     onBackToHomeClicked = {
                         appState.navigateToTopLevelDestination(TopLevelDestination.HOME)
                     },
+                    navigateToSignIn = navController::navigateToSignIn,
                     popBackStack = navController::popBackStack
                 )
 
@@ -76,6 +81,16 @@ fun NavHost(
         )
 
         analyticsRoute()
+
+        signInRoute(
+            navigateToSignUp = navController::navigateToSignUp,
+            navigateToHome = {}
+        )
+
+        signUpRoute(
+            navigateToSignIn = navController::navigateToSignIn,
+            navigateToHome = {}
+        )
 
 
         profileRoute(

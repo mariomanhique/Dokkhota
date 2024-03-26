@@ -6,4 +6,15 @@
     <string name="profile">Profile</string>
     <string name="menu">Menu</string>
     <string name="chooseAction">Choose</string>
+
+    <string name="username">Username</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="login_button">Sign In</string>
+    <string name="landing_text">If you have an account,</string>
+    <string name="sign_in_text">Have an account?</string>
+    <string name="sign_In">Sign In</string>
+
+    <string name="sign_up">Sign Up</string>
+    <string name="sign_up_text">Don\'t have an account?</string>
 </resources>

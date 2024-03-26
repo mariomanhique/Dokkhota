@@ -3,6 +3,8 @@ package com.mariomanhique.dokkhota.di
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.mariomanhique.dokkhota.data.repository.authRepository.AuthRepository
+import com.mariomanhique.dokkhota.data.repository.authRepository.AuthRepositoryImpl
 import com.mariomanhique.dokkhota.data.repository.examsRepository.ExamsRepository
 import com.mariomanhique.dokkhota.data.repository.examsRepository.ExamsRepositoryImpl
 import com.mariomanhique.dokkhota.data.repository.profileRepository.ProfileRepository
@@ -33,6 +35,10 @@ object AppModule {
     fun provideExamsRepository(examsRepository: ExamsRepositoryImpl): ExamsRepository {
         return examsRepository
     }
+
+    @Singleton
+    @Provides
+    fun provideAuthRepository(authRepository: AuthRepositoryImpl):AuthRepository = authRepository
 
 
 }

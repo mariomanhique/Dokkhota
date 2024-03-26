@@ -56,6 +56,7 @@ fun PlayScreen(
     paddingValues: PaddingValues,
     playViewModel: PlayViewModel = hiltViewModel(),
     onBackToHomeClicked: () -> Unit,
+    navigateToSignIn: () -> Unit,
     popBackStack: () -> Unit,
 ){
 
@@ -72,7 +73,8 @@ fun PlayScreen(
                     questions = examQuestions,
                     paddingValues = paddingValues,
                     onBackToHomeClicked = onBackToHomeClicked,
-                    popBackStack = popBackStack
+                    popBackStack = popBackStack,
+                    navigateToSignIn = navigateToSignIn
                 )
             }else{
                 EmptyPage(
@@ -96,6 +98,7 @@ fun PlayContent(
      questions: List<Question>,
      paddingValues: PaddingValues,
      onBackToHomeClicked: () -> Unit,
+     navigateToSignIn: () -> Unit,
      popBackStack: () -> Unit,
 ){
 
@@ -196,7 +199,7 @@ fun PlayContent(
                     Text(text = "Back")
                 }
                 TextButton(onClick = {
-                    isExamCompleted = false
+                    navigateToSignIn()
                 }) {
                     Text(text = "Check Score")
                 }
