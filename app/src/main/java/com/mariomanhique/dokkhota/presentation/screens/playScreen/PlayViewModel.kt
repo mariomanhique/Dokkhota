@@ -1,6 +1,8 @@
 package com.mariomanhique.dokkhota.presentation.screens.playScreen
 
 import android.util.Log
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -34,6 +36,9 @@ class PlayViewModel @Inject constructor(
     private var _exams = MutableStateFlow<Questions>(Result.Loading)
     val exams = _exams.asStateFlow()
 
+    val _examNr:MutableState<String> = mutableStateOf("")
+    val _category:MutableState<String> = mutableStateOf("")
+
     init {
         val savedArgs = savedStateHandle.get<String?>(
             key = Constants.EXAM_NUMBER_ARG,
@@ -44,6 +49,9 @@ class PlayViewModel @Inject constructor(
             val keys = savedArgs.split("-")
             val examNr = keys[0]
             val category = keys[1]
+
+            _examNr.value = examNr
+            _category.value = category
 
             Log.d("Keys", ":$examNr $category ")
 

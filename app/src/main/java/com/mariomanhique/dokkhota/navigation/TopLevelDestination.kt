@@ -1,6 +1,7 @@
 package com.mariomanhique.dokkhota.navigation
 
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.rounded.Article
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.outlined.Article
 import androidx.compose.material.icons.outlined.AutoGraph
@@ -27,15 +28,15 @@ enum class TopLevelDestination(
     val iconTextId: Int,
     val titleTextId: Int
 ) {
-    HOME(
+//    HOME(
+//        selectedIcon = Icons.Rounded.Home,
+//        unselectedIcon = Icons.Outlined.Home,
+//        iconTextId = R.string.home,
+//        titleTextId = R.string.app_name
+//    ),
+    EXAM(
         selectedIcon = Icons.Rounded.Home,
         unselectedIcon = Icons.Outlined.Home,
-        iconTextId = R.string.home,
-        titleTextId = R.string.app_name
-    ),
-    EXAM(
-        selectedIcon = Icons.Rounded.Article,
-        unselectedIcon = Icons.Outlined.Article,
         iconTextId = R.string.exam,
         titleTextId =R.string.exam
 

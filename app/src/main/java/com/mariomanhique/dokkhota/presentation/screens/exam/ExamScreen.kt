@@ -1,5 +1,6 @@
 package com.mariomanhique.dokkhota.presentation.screens.exam
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -63,11 +64,11 @@ fun ExamContent(
         modifier = Modifier.fillMaxSize()
             .padding(horizontal = 24.dp)
             .navigationBarsPadding()
-            .padding(top = paddingValues.calculateTopPadding())
+//            .padding(top = paddingValues.calculateTopPadding())
             .padding(bottom = paddingValues.calculateBottomPadding())
             .padding(start = paddingValues.calculateStartPadding(LayoutDirection.Ltr))
             .padding(end = paddingValues.calculateEndPadding(LayoutDirection.Ltr)),
-//        verticalArrangement = Arrangement.Center,
+        verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         item {
@@ -75,7 +76,7 @@ fun ExamContent(
                 modifier = Modifier.paddingFromBaseline(top = 20.dp, bottom = 60.dp),
                 text = "CATEGORIES",
                 style = MaterialTheme.typography.titleLarge.copy(
-                    fontSize = 40.sp
+                    fontSize = 30.sp
                 ),
 //                fontWeight = FontWeight.ExtraBold,
                 )
@@ -120,7 +121,7 @@ fun CategoryCard(
             AsyncImage(
                 modifier = Modifier
                     .size(80.dp),
-                model = R.drawable.ic_profile,
+                model = R.drawable.profile,
                 contentDescription =""
 
             )

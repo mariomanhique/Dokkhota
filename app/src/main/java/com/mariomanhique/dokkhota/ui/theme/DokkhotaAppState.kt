@@ -53,7 +53,7 @@ class DokkhotaAppState(
 
     val currentTopLevelDestination: TopLevelDestination?
         @Composable get() = when (currentDestination?.route) {
-            homeRoute -> TopLevelDestination.HOME
+//            homeRoute -> TopLevelDestination.HOME
             examRoute, "$examsListRoute/{$CATEGORY_ARG}" -> TopLevelDestination.EXAM
             analyticsRoute -> TopLevelDestination.ANALYTICS
             profileRoute -> TopLevelDestination.PROFILE
@@ -96,7 +96,7 @@ class DokkhotaAppState(
             }
 
             when(topLevelDestination){
-                TopLevelDestination.HOME -> navController.navigateToHome(topLevelNavOptions)
+//                TopLevelDestination.HOME -> navController.navigateToHome(topLevelNavOptions)
                 TopLevelDestination.PROFILE -> navController.navigateToProfile(topLevelNavOptions)
                 TopLevelDestination.ANALYTICS -> navController.navigateToAnalytics(topLevelNavOptions)
                 TopLevelDestination.EXAM -> navController.navigateToExamsGraph(topLevelNavOptions)

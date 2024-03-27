@@ -1,6 +1,7 @@
 package com.mariomanhique.dokkhota.presentation.screens.exam
 
 import android.util.Log
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -72,13 +73,14 @@ fun ExamsListContent(
         modifier = Modifier
             .fillMaxSize()
             .padding(paddingValues),
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Top
     ) {
         Text(
 //            modifier = Modifier.padding(20.dp),
             text = category,
             style = MaterialTheme.typography.titleLarge.copy(
-                fontSize = 40.sp
+                fontSize = 30.sp
             ),
 //                fontWeight = FontWeight.ExtraBold,
         )
@@ -86,11 +88,11 @@ fun ExamsListContent(
         LazyColumn(
             modifier = Modifier.fillMaxSize()
                 .padding(horizontal = 24.dp)
-                .navigationBarsPadding()
-                .padding(top = paddingValues.calculateTopPadding())
-                .padding(bottom = paddingValues.calculateBottomPadding())
-                .padding(start = paddingValues.calculateStartPadding(LayoutDirection.Ltr))
-                .padding(end = paddingValues.calculateEndPadding(LayoutDirection.Ltr))
+//                .navigationBarsPadding()
+//                .padding(top = paddingValues.calculateTopPadding())
+//                .padding(bottom = paddingValues.calculateBottomPadding())
+//                .padding(start = paddingValues.calculateStartPadding(LayoutDirection.Ltr))
+//                .padding(end = paddingValues.calculateEndPadding(LayoutDirection.Ltr))
         ) {
 
             items(items = examsCount){
@@ -99,13 +101,9 @@ fun ExamsListContent(
                     examN = it
                 )
             }
-
         }
     }
 }
-
-
-
 
 @Composable
 fun ExamCard(

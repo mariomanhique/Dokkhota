@@ -49,7 +49,7 @@ fun HomeTopBar(
         actions = {
             IconButton(onClick = onMenuClicked) {
                 Icon(
-                    imageVector =Icons.Rounded.Menu,
+                    imageVector =Icons.Rounded.Settings,
                     contentDescription = stringResource(id = R.string.menu),
                 )
             }

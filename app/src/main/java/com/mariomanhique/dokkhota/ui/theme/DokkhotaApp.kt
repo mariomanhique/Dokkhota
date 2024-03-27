@@ -3,13 +3,23 @@ package com.mariomanhique.dokkhota.ui.theme
 import android.annotation.SuppressLint
 import android.util.Log
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.WindowInsetsSides
+import androidx.compose.foundation.layout.consumeWindowInsets
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.only
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawing
+import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -41,8 +51,12 @@ import androidx.compose.ui.semantics.testTagsAsResourceId
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hierarchy
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
+import com.mariomanhique.dokkhota.R
 import com.mariomanhique.dokkhota.navigation.NavHost
 import com.mariomanhique.dokkhota.navigation.TopLevelDestination
+import com.mariomanhique.dokkhota.presentation.components.CustomDialog
 import com.mariomanhique.dokkhota.presentation.components.HomeTopBar
 import com.mariomanhique.dokkhota.presentation.screens.menu.MenuSheet
 
@@ -63,6 +77,26 @@ fun DokkhotaApp(
         mutableStateOf(false)
     }
 
+    var dialogState by remember {
+        mutableStateOf(false)
+    }
+
+    if (dialogState){
+        CustomDialog(
+            title = R.string.signOut,
+            text = R.string.signout_confirmation ,
+            onDismissDialog = {
+                dialogState = false
+            },
+            confirmButton = {
+                FirebaseAuth.getInstance().signOut()
+                isSheetOpen = false
+                if (FirebaseAuth.getInstance().currentUser == null){
+                    dialogState = false
+                }
+            }
+        )
+    }
 
     if (isSheetOpen){
         MenuSheet(
@@ -70,7 +104,9 @@ fun DokkhotaApp(
                 isSheetOpen = false
             },
             onSignedOut = {
-
+                if (FirebaseAuth.getInstance().currentUser != null){
+                    dialogState = true
+                }
             }
         )
     }
@@ -80,10 +116,10 @@ fun DokkhotaApp(
             .semantics {
                 testTagsAsResourceId = true
             }
-            .background(MaterialTheme.colorScheme.surface)
-            .navigationBarsPadding()
-            .imePadding()
-            .statusBarsPadding(),
+            .background(MaterialTheme.colorScheme.surface),
+//            .navigationBarsPadding(),
+//            .imePadding()
+//            .statusBarsPadding(),
         containerColor = Color.Transparent,
         contentColor = MaterialTheme.colorScheme.onBackground,
         contentWindowInsets = WindowInsets(0, 0, 0, 0),
@@ -112,12 +148,37 @@ fun DokkhotaApp(
                     )
                 }
             }
-        }){
+        }){paddingValues->
+        Row(
+            Modifier
+                .fillMaxSize()
+                .padding(paddingValues)
+                .consumeWindowInsets(paddingValues)
+                .windowInsetsPadding(
+                    WindowInsets.safeDrawing.only(
+                        WindowInsetsSides.Horizontal,
+                    ),
+                ),
+        ) {
+            if (appState.shouldShowNavRail) {
+                if (destination != null) {
+                    DokkhotaNavRail(
+                        destinations = appState.topLevelDestinations,
+                        onNavigateToDestination = appState::navigateToTopLevelDestination,
+                        currentDestination = appState.currentDestination,
+                        modifier = Modifier
+                            .testTag("DiaryNavRail")
+                            .safeDrawingPadding(),
+                    )
+                }
+            }
+            Column {
+                NavHost(appState = appState, onSplashDismissed = { /*TODO*/ }, paddingValues = paddingValues)
+            }
+        }
 
-        NavHost(appState = appState, onSplashDismissed = { /*TODO*/ }, paddingValues = it)
+
     }
-
-
 
 }
 

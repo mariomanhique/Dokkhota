@@ -1,5 +1,6 @@
 package com.mariomanhique.dokkhota.presentation.screens.analytics.navigation
 
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
@@ -13,8 +14,14 @@ fun NavController.navigateToAnalytics(navOptions: NavOptions? = null){
 }
 
 
-fun NavGraphBuilder.analyticsRoute(){
+fun NavGraphBuilder.analyticsRoute(
+    paddingValues: PaddingValues,
+    navigateToSignIn: () -> Unit,
+){
     composable(route = analyticsRoute){
-        AnalyticsScreen()
+        AnalyticsScreen(
+            paddingValues = paddingValues,
+            navigateToSignIn = navigateToSignIn
+        )
     }
 }

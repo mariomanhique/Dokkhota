@@ -57,32 +57,3 @@ fun BCSCard(
 
 }
 
-@Composable
-fun EmptyPage(
-    title: String = "Empty Diary",
-    subtitle: String = "Write Something"
-) {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(all = 24.dp),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Text(
-            text = title,
-            style = TextStyle(
-                fontSize = MaterialTheme.typography.titleMedium.fontSize,
-                fontWeight = FontWeight.Medium
-            )
-        )
-        Text(
-            text = subtitle,
-            style = TextStyle(
-                fontSize = MaterialTheme.typography.bodyMedium.fontSize,
-                fontWeight = FontWeight.Normal
-            )
-        )
-    }
-}
-

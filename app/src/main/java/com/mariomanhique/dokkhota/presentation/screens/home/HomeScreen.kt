@@ -27,10 +27,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mariomanhique.dokkhota.model.Question
 import com.mariomanhique.dokkhota.model.Result
-import com.mariomanhique.dokkhota.presentation.screens.home.EmptyPage
-import com.mariomanhique.dokkhota.presentation.screens.home.HomeContent
-import com.mariomanhique.dokkhota.presentation.screens.home.HomeContentLandscape
-import java.time.ZonedDateTime
 
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")

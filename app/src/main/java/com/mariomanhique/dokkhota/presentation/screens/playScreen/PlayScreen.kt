@@ -1,15 +1,14 @@
 package com.mariomanhique.dokkhota.presentation.screens.playScreen
 
-import android.util.Log
-import androidx.activity.compose.BackHandler
+import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.calculateEndPadding
 import androidx.compose.foundation.layout.calculateStartPadding
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.navigationBarsPadding
@@ -19,12 +18,17 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.selection.selectableGroup
-import androidx.compose.material3.AlertDialog
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.DoneAll
 import androidx.compose.material3.Button
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.RadioButtonColors
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -37,34 +41,43 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.semantics.Role
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.google.firebase.auth.FirebaseAuth
+import com.mariomanhique.dokkhota.R
 import com.mariomanhique.dokkhota.model.Question
 import com.mariomanhique.dokkhota.model.Result
+import com.mariomanhique.dokkhota.presentation.components.CustomDialog
+import com.mariomanhique.dokkhota.presentation.components.EmptyPage
+import com.mariomanhique.dokkhota.presentation.screens.analytics.AnalyticsViewModel
 import com.mariomanhique.dokkhota.util.HandleBackButtonPress
 import kotlinx.coroutines.delay
 
 @Composable
 fun PlayScreen(
     paddingValues: PaddingValues,
-    playViewModel: PlayViewModel = hiltViewModel(),
     onBackToHomeClicked: () -> Unit,
     navigateToSignIn: () -> Unit,
     popBackStack: () -> Unit,
+    playViewModel: PlayViewModel = hiltViewModel(),
+    analyticsViewModel: AnalyticsViewModel = hiltViewModel()
 ){
-
     val questions by playViewModel.exams.collectAsStateWithLifecycle()
+    val examNr = playViewModel._examNr.value
+    val category = playViewModel._category.value
+
+    val context = LocalContext.current
+
 
     when(questions){
         is Result.Success ->{
-//            Log.d("Questions", "Play: ${}")
 
             val examQuestions = (questions as Result.Success<List<Question>>).data
 
@@ -74,7 +87,16 @@ fun PlayScreen(
                     paddingValues = paddingValues,
                     onBackToHomeClicked = onBackToHomeClicked,
                     popBackStack = popBackStack,
-                    navigateToSignIn = navigateToSignIn
+                    navigateToSignIn = navigateToSignIn,
+                    onScoreSaved = {
+                        analyticsViewModel.saveExamScore(
+                            category = category,
+                            examNr = examNr,
+                            percentage = 0F,
+                            onSuccess = {},
+                            onFailure = {}
+                        )
+                    }
                 )
             }else{
                 EmptyPage(
@@ -93,10 +115,12 @@ fun PlayScreen(
     }
 }
 
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun PlayContent(
      questions: List<Question>,
      paddingValues: PaddingValues,
+     onScoreSaved: () -> Unit,
      onBackToHomeClicked: () -> Unit,
      navigateToSignIn: () -> Unit,
      popBackStack: () -> Unit,
@@ -107,53 +131,35 @@ fun PlayContent(
     var timesClicked by remember {
         mutableStateOf(0)
     }
-    var value by remember {
-        mutableFloatStateOf(0F)
-    }
-
-    var onDismissDialod by remember {
+    var dialogState by remember {
         mutableStateOf(false)
     }
+    var isScoreSaved by remember { mutableStateOf(false) }
     var initialTime by remember { mutableLongStateOf(0L) }
     var currentTime by remember { mutableLongStateOf(0L) }
-    var isTimerRunning by remember { mutableStateOf(false) }
+    var isTimerRunning by remember { mutableStateOf(true) }
     var progress by remember { mutableFloatStateOf(0f) }
 
 
 
  
     HandleBackButtonPress {
-        onDismissDialod = true
+        dialogState = true
     }
     
-    if (onDismissDialod){
-        AlertDialog(
-            title = { 
-                Text(text = "Quit Exam?")
-            },
-            text = {
-               Text(text = "Are you sure you want to quick this exam?")
-            },
-            onDismissRequest = {
-                       onDismissDialod = false
-        }, confirmButton = {
-            Button(onClick = {
-                onDismissDialod = false
-                popBackStack()
-            }) {
-                Text(text = "Yes")
-            }
-        },
-        dismissButton = {
-            Button(onClick = {
-                onDismissDialod = false
-            }) {
-                Text(text = "No")
-            }
-        }
-        )
+    if (dialogState){
+       CustomDialog(
+           title = R.string.examQuit,
+           text = R.string.examQuitText ,
+           onDismissDialog = {
+               dialogState = false
+           },
+           confirmButton = {
+               dialogState = false
+               popBackStack()
+           }
+       )
     }
-    
 
     fun startTimer(initialT: Long) {
         currentTime = initialT
@@ -162,16 +168,15 @@ fun PlayContent(
     }
 
     //The logic behind the timer
-    LaunchedEffect(isTimerRunning) {
-        if (isTimerRunning) {
-            while (currentTime > 0) {
+    LaunchedEffect(key1 = isTimerRunning, key2 = currentTime) {
+        if (currentTime>0 && isTimerRunning) {
                 delay(100L)
                 currentTime -= 100L
                 progress = 1f - currentTime / initialTime.toFloat()
-            }
-            isTimerRunning = false  // Update isTimerRunning after the loop
+        } else {
+            isTimerRunning = false
+//            isExamCompleted = true
         }
-
     }
 
     // The timer starts when the composable is first composed
@@ -179,79 +184,112 @@ fun PlayContent(
         startTimer(10 * 1000L) // Start the timer with 10 seconds (10 * 1000 milliseconds)
     }
 
-    isExamCompleted = !isTimerRunning
+    if (!isTimerRunning){
+        isExamCompleted = true
+    }
 
-    Column(
-        modifier = Modifier.fillMaxWidth()
-    ) {
-        LinearProgressIndicator(
-            modifier = Modifier.fillMaxWidth(),
-            progress = { progress }
-        )
-        if (isExamCompleted){
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-               horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                TextButton(onClick = {
-                   popBackStack()
-                }) {
-                    Text(text = "Back")
-                }
-                TextButton(onClick = {
-                    navigateToSignIn()
-                }) {
-                    Text(text = "Check Score")
-                }
-            }
+    if (isExamCompleted && !isScoreSaved) {
+        if (FirebaseAuth.getInstance().currentUser != null) {
+            onScoreSaved()
+            isScoreSaved = true
         }
+    }
 
-
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxHeight(0.93F)
-                .padding(horizontal = 24.dp)
-                .navigationBarsPadding()
-                .padding(top = paddingValues.calculateTopPadding())
-                .padding(bottom = paddingValues.calculateBottomPadding())
-                .padding(start = paddingValues.calculateStartPadding(LayoutDirection.Ltr))
-                .padding(end = paddingValues.calculateEndPadding(LayoutDirection.Ltr)),
-        ) {
-            itemsIndexed(items = questions) { index, item ->
-                QACard(
-                    index = index,
-                    question = item.question,
-                    answer = item.answer,
-                    selectedOption = selectedOptions[index],
-                    onSelectOption = { option ->
-                        selectedOptions += index to option
-                    },
-                    isExamCompleted = isExamCompleted,
-                    choices = item.choices,
-                )
-            }
-        }
-
-        if (isExamCompleted){
-            Button(
-                onClick = {
-                    isExamCompleted = true
-                    timesClicked +=1
-                    onBackToHomeClicked()
-                },
+    Scaffold(
+        floatingActionButton = {
+            FloatingActionButton(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 20.dp),
-                shape = MaterialTheme.shapes.small,
+                    .padding(4.dp)
+                    .clip(CircleShape),
+                onClick ={
+                    isExamCompleted = true
+                    isTimerRunning = false
+                }
             ) {
-                Text(text = if (!isExamCompleted) "Submit" else "Back To Home")
+                Box(
+                    modifier = Modifier
+                ) {
+                    Icon(
+                        modifier = Modifier,
+                        imageVector = Icons.Default.DoneAll,
+                        contentDescription = ""
+                    )
+                }
             }
         }
+    ) {
 
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(it)
+        ) {
+                    LinearProgressIndicator(
+                        modifier = Modifier.fillMaxWidth(),
+                        progress = { progress }
+                    )
+                if (isExamCompleted) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        TextButton(onClick = {
+                            popBackStack()
+                        }) {
+                            Text(text = "Back")
+                        }
+                        TextButton(onClick = {
+                            navigateToSignIn()
+                        }) {
+                            Text(text = "Check Score")
+                        }
+                    }
+                }
+
+                LazyColumn (
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(horizontal = 24.dp)
+//                        .navigationBarsPadding()
+//                        .padding(top = it.calculateTopPadding())
+//                        .padding(bottom = it.calculateBottomPadding())
+//                        .padding(start = it.calculateStartPadding(LayoutDirection.Ltr))
+//                        .padding(end = it.calculateEndPadding(LayoutDirection.Ltr)),
+            ) {
+                itemsIndexed(items = questions) { index, item ->
+                    QACard(
+                        index = index,
+                        question = item.question,
+                        answer = item.answer,
+                        selectedOption = selectedOptions[index],
+                        onSelectOption = { option ->
+                            selectedOptions += index to option
+                        },
+                        isExamCompleted = isExamCompleted,
+                        choices = item.choices,
+                    )
+                }
+            }
+
+            if (isExamCompleted){
+                Button(
+                    onClick = {
+                        isExamCompleted = true
+                        timesClicked +=1
+                        onBackToHomeClicked()
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 20.dp),
+                    shape = MaterialTheme.shapes.small,
+                ) {
+                    Text(text = if (!isExamCompleted) "Submit" else "Back To Home")
+                }
+            }
+
+        }
     }
 }
-
-
 @Composable
 fun QACard(
     index: Int,
@@ -287,34 +325,6 @@ private fun SectionTitle(text: String) {
     )
 }
 
-@Composable
-fun EmptyPage(
-    title: String = "Empty Diary",
-    subtitle: String = "Write Something"
-) {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(all = 24.dp),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Text(
-            text = title,
-            style = TextStyle(
-                fontSize = MaterialTheme.typography.titleMedium.fontSize,
-                fontWeight = FontWeight.Medium
-            )
-        )
-        Text(
-            text = subtitle,
-            style = TextStyle(
-                fontSize = MaterialTheme.typography.bodyMedium.fontSize,
-                fontWeight = FontWeight.Normal
-            )
-        )
-    }
-}
 @Composable
 fun ChooserRow(
     text: String,

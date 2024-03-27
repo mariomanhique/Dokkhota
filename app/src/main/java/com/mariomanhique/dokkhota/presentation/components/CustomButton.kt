@@ -35,13 +35,12 @@ fun CustomButton(
             enabled = buttonEnabled,
             onClick = onClicked,
             shape = MaterialTheme.shapes.medium,
-            colors = ButtonDefaults.buttonColors(
-//                containerColor = Color.Unspecified,
-            )
+//            colors = ButtonDefaults.buttonColors(
+////                containerColor = Color.Unspecified,
+//            )
         ) {
             Text(text = stringResource(id = buttonText))
         }
-
     }
 }
 

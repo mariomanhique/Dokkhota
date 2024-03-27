@@ -3,6 +3,8 @@ package com.mariomanhique.dokkhota.di
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.mariomanhique.dokkhota.data.repository.analyticsRepository.AnalyticsRepository
+import com.mariomanhique.dokkhota.data.repository.analyticsRepository.AnalyticsRepositoryImpl
 import com.mariomanhique.dokkhota.data.repository.authRepository.AuthRepository
 import com.mariomanhique.dokkhota.data.repository.authRepository.AuthRepositoryImpl
 import com.mariomanhique.dokkhota.data.repository.examsRepository.ExamsRepository
@@ -26,19 +28,27 @@ object AppModule {
 
     @Singleton
     @Provides
-    fun provideProfileRepository(profileRepository: ProfileRepositoryImpl): ProfileRepository {
-        return profileRepository
-    }
+    fun provideProfileRepository(
+        profileRepository: ProfileRepositoryImpl
+    ): ProfileRepository = profileRepository
 
     @Singleton
     @Provides
-    fun provideExamsRepository(examsRepository: ExamsRepositoryImpl): ExamsRepository {
-        return examsRepository
-    }
+    fun provideExamsRepository(
+        examsRepository: ExamsRepositoryImpl
+    ): ExamsRepository = examsRepository
 
     @Singleton
     @Provides
-    fun provideAuthRepository(authRepository: AuthRepositoryImpl):AuthRepository = authRepository
+    fun provideAuthRepository(
+        authRepository: AuthRepositoryImpl
+    ):AuthRepository = authRepository
+
+    @Singleton
+    @Provides
+    fun provideAnalyticsRepository(
+        analyticsRepositoryImpl: AnalyticsRepositoryImpl
+    ):AnalyticsRepository = analyticsRepositoryImpl
 
 
 }

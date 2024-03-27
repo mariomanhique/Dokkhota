@@ -24,6 +24,7 @@ fun NavController.navigateToProfile(navOptions: NavOptions?=null){
 }
 fun NavGraphBuilder.profileRoute(
     profileViewModel: ProfileViewModel,
+    navigateToSignIn: () -> Unit,
     paddingValues: PaddingValues
 ){
 
@@ -36,6 +37,14 @@ fun NavGraphBuilder.profileRoute(
 
         ProfileScreen(
             profileViewModel = profileViewModel,
+            onDeleteClicked = {
+                deleteAllDialogOpened = it
+                Toast.makeText(context, "$it", Toast.LENGTH_SHORT).show()
+            },
+            navigateToSignIn = navigateToSignIn,
+            onLogoutClicked = {
+                signOutDialogState = it
+            },
             paddingValues = paddingValues
         )
 
@@ -56,7 +65,7 @@ fun NavGraphBuilder.profileRoute(
 //                }
 //            }
 //        )
-//
+
 //        DisplayAlertDialog(
 //            title = "Delete All Diaries",
 //            message = "Are you sure you want to delete all diaries?",

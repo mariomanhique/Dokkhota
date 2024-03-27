@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -36,21 +37,26 @@ fun MenuSheet(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(10.dp)
+                .padding(horizontal = 10.dp)
+                .padding(vertical = 20.dp)
 
         ) {
-            Text(text = "BottomSheet")
+            Text(text = "Settings")
 
             HorizontalDivider()
 
-            ClickableText(
-                text = AnnotatedString("Sign Out"),
-                modifier = Modifier
-                    .padding(10.dp),
-            ) {
-                onSignedOut()
+            if (FirebaseAuth.getInstance().currentUser != null){
+                ClickableText(
+                    text = AnnotatedString("Sign Out"),
+                    style = MaterialTheme.typography.bodyMedium.copy(
+                        color = MaterialTheme.colorScheme.onBackground
+                    ),
+                    modifier = Modifier
+                        .padding(10.dp),
+                ) {
+                    onSignedOut()
+                }
             }
-
         }
 
     }
