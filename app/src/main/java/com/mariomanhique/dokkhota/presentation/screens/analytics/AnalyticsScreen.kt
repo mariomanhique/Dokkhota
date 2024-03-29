@@ -18,6 +18,8 @@ import androidx.compose.material3.ProgressIndicatorDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -39,21 +41,12 @@ fun AnalyticsScreen(
 ){
 
 
-
+    val scores by analyticsViewModel.scores.collectAsStateWithLifecycle()
     if (FirebaseAuth.getInstance().currentUser != null){
-        val scores by analyticsViewModel.scores!!.collectAsStateWithLifecycle()
-        when(scores){
-            is Result.Success -> {
-                AnalyticsContent(
-                    paddingValues = paddingValues,
-                    scores = (scores as Result.Success<List<Score>>).data
-
-                )
-            }
-            else -> {
-
-            }
-        }
+        AnalyticsContent(
+            paddingValues = paddingValues,
+            scores = scores
+        )
     }else{
 
         Column(
@@ -122,10 +115,14 @@ fun AnalyticsContent(
 @Composable
 fun AnalyticsCard(
     modifier: Modifier = Modifier,
-    percentage: Float,
+    percentage: Long,
     examNr: String
 
 ){
+
+    val progress by remember {
+        mutableFloatStateOf(percentage.toFloat()/100)
+    }
     Row(
         modifier = modifier
             .fillMaxWidth()
@@ -146,13 +143,13 @@ fun AnalyticsCard(
                 .heightIn(min = 10.dp, max = 15.dp),
             strokeCap = ProgressIndicatorDefaults.LinearStrokeCap,
             progress = {
-                percentage
+               ( progress)
         })
 
         Text(
             modifier = Modifier
                 .weight(0.5F),
-            text = "${percentage*100}%"
+            text = "${percentage}%"
         )
     }
 

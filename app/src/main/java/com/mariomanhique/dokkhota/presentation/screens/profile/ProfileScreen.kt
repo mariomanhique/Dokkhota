@@ -91,7 +91,6 @@ fun ProfileScreen(
                 subtitle = "You don't yet have an account, SignUp/SignIn!"
 
             )
-
             CustomButton(
                 modifier = Modifier.padding(horizontal = 40.dp),
                 buttonText = R.string.sign_In,

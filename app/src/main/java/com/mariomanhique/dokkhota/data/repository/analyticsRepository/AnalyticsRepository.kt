@@ -13,12 +13,14 @@ interface AnalyticsRepository {
 
     suspend fun updateExamScore(
         scoreId: String, // We will use this ti find the score and then update it.
-        category: String,
-        examNr: String,
-        percentage: Float
-    ):Result<Boolean>
+        attempts: Int,
+        percentage: Long
+    ):Result<String>
 
     fun getAllExamsScores(
-        userId: String
-    ): Flow<Result<List<Score>>>
+    ): Flow<List<Score>>
+
+   suspend fun getSingleExamScore(
+        examNr: String
+    ): Result<Score>
 }

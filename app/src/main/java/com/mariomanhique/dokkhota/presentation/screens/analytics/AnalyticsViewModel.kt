@@ -21,51 +21,14 @@ class AnalyticsViewModel @Inject constructor(
 
     val user = FirebaseAuth.getInstance().currentUser
 
-
-
-
-    val scores: StateFlow<Result<List<Score>>>? =
-        user?.let {
+    val scores: StateFlow<List<Score>> =
             analyticsRepository
-                .getAllExamsScores(it.uid)
+                .getAllExamsScores()
                 .stateIn(
                     scope = viewModelScope,
                     started = SharingStarted.WhileSubscribed(5_000),
-                    initialValue = Result.Loading
+                    initialValue = emptyList()
                 )
-        }
-
-
-    fun saveExamScore(
-        category: String,
-        examNr: String,
-        percentage: Float,
-        onSuccess: () -> Unit,
-        onFailure: () -> Unit
-    ){
-        viewModelScope.launch {
-            val user = FirebaseAuth.getInstance().currentUser
-            if (user != null){
-               val result = analyticsRepository.saveExamScore(
-                    score = Score(
-                        userID = user.uid,
-                        category = category,
-                        examNr = examNr,
-                        percentage = percentage
-                    )
-                )
-                when(result){
-                    is Result.Success -> {
-                        onSuccess()
-                    }
-                    else -> {
-                        onFailure()
-                    }
-                }
-            }
-
-        }
-    }
-
-
 }
+
+

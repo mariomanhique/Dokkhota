@@ -27,4 +27,12 @@
     <string name="sign_up_text">Don\'t have an account?</string>
     <string name="placeholder">Username</string>
     <string name="deleteAll">Delete All</string>
+
+<!--    //Results-->
+    <string name="wrong">Wrong</string>
+    <string name="correct">Correct</string>
+    <string name="total">Total</string>
+    <string name="attempts">Attempts</string>
+
+
 </resources>

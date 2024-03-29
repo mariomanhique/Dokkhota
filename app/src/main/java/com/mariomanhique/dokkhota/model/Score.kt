@@ -1,10 +1,14 @@
 package com.mariomanhique.dokkhota.model
 
+import java.util.UUID
+
 data class Score(
-    val userID: String ="",
+    val scoreId: String = UUID.randomUUID().toString(),
     val category: String = "",
     val examNr: String = "",
-    val percentage: Float = 0.0F,
+    val userID: String ="",
+    val attempts: Int = 0,
+    val percentage: Long = 0L,
 //    val rightAnswers: Int,
 //    val wrongAnswers: Int,
 //    val totalQuestions: Int

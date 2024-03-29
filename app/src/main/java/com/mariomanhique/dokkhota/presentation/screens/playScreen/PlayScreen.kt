@@ -1,17 +1,15 @@
 package com.mariomanhique.dokkhota.presentation.screens.playScreen
 
 import android.annotation.SuppressLint
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.calculateEndPadding
-import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
@@ -35,6 +33,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.mutableStateOf
@@ -45,7 +44,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.semantics.Role
-import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -59,6 +57,7 @@ import com.mariomanhique.dokkhota.presentation.components.EmptyPage
 import com.mariomanhique.dokkhota.presentation.screens.analytics.AnalyticsViewModel
 import com.mariomanhique.dokkhota.util.HandleBackButtonPress
 import kotlinx.coroutines.delay
+import kotlin.math.log
 
 @Composable
 fun PlayScreen(
@@ -70,11 +69,42 @@ fun PlayScreen(
     analyticsViewModel: AnalyticsViewModel = hiltViewModel()
 ){
     val questions by playViewModel.exams.collectAsStateWithLifecycle()
+    var totalQuestions by remember {
+        mutableIntStateOf(0)
+    }
+
+    var rightAnswers by remember {
+        mutableIntStateOf(0)
+    }
+
+    var wrongAnswers by remember {
+        mutableIntStateOf(0)
+    }
+
+//    var attempts by remember {
+//        mutableIntStateOf(0)
+//    }
     val examNr = playViewModel._examNr.value
+    val attempts = playViewModel._attempts.value
     val category = playViewModel._category.value
+    var sheetState by remember {
+        mutableStateOf(false)
+    }
 
     val context = LocalContext.current
 
+    
+    if (sheetState){
+        ResultSheet(
+            onSheetDismissed = {
+                sheetState = false
+            },
+            totalQuestions = totalQuestions,
+            correctAnswers = rightAnswers,
+            wrongAnswers = wrongAnswers,
+            attempts = attempts
+        )
+    }
 
     when(questions){
         is Result.Success ->{
@@ -82,20 +112,28 @@ fun PlayScreen(
             val examQuestions = (questions as Result.Success<List<Question>>).data
 
             if (examQuestions.isNotEmpty()){
+                totalQuestions = examQuestions.count()
                 PlayContent(
                     questions = examQuestions,
                     paddingValues = paddingValues,
                     onBackToHomeClicked = onBackToHomeClicked,
                     popBackStack = popBackStack,
                     navigateToSignIn = navigateToSignIn,
-                    onScoreSaved = {
-                        analyticsViewModel.saveExamScore(
+                    onScoreSaved = {rAnswers, wAnswers->
+                        Log.d("CorrectAnswers", "PlayScreen:$rAnswers")
+                        rightAnswers = rAnswers
+                        wrongAnswers = wAnswers
+
+                        sheetState = true
+
+                        playViewModel.saveOrUpdateScore(
                             category = category,
                             examNr = examNr,
-                            percentage = 0F,
+                            percentage = ((rAnswers*100)/examQuestions.count()).toLong(),
                             onSuccess = {},
                             onFailure = {}
                         )
+
                     }
                 )
             }else{
@@ -104,7 +142,6 @@ fun PlayScreen(
                     subtitle = "This Exam has no questions yet"
                 )
             }
-
         }
         is Result.Error ->{
 
@@ -120,17 +157,16 @@ fun PlayScreen(
 fun PlayContent(
      questions: List<Question>,
      paddingValues: PaddingValues,
-     onScoreSaved: () -> Unit,
+     onScoreSaved: (Int,Int) -> Unit,
      onBackToHomeClicked: () -> Unit,
      navigateToSignIn: () -> Unit,
      popBackStack: () -> Unit,
 ){
 
+    var correctSelectedCount by remember { mutableIntStateOf(0) }
+    var wrongSelectedCount by remember { mutableIntStateOf(0) }
     var selectedOptions by remember { mutableStateOf<Map<Int, String>>(emptyMap()) }
     var isExamCompleted by remember { mutableStateOf(false) }
-    var timesClicked by remember {
-        mutableStateOf(0)
-    }
     var dialogState by remember {
         mutableStateOf(false)
     }
@@ -175,7 +211,6 @@ fun PlayContent(
                 progress = 1f - currentTime / initialTime.toFloat()
         } else {
             isTimerRunning = false
-//            isExamCompleted = true
         }
     }
 
@@ -190,8 +225,9 @@ fun PlayContent(
 
     if (isExamCompleted && !isScoreSaved) {
         if (FirebaseAuth.getInstance().currentUser != null) {
-            onScoreSaved()
+            onScoreSaved(correctSelectedCount, wrongSelectedCount)
             isScoreSaved = true
+//            Log.d("Save", "PlayContent: ")
         }
     }
 
@@ -241,7 +277,7 @@ fun PlayContent(
                         TextButton(onClick = {
                             navigateToSignIn()
                         }) {
-                            Text(text = "Check Score")
+                            Text(text = "Check Performance")
                         }
                     }
                 }
@@ -264,29 +300,21 @@ fun PlayContent(
                         selectedOption = selectedOptions[index],
                         onSelectOption = { option ->
                             selectedOptions += index to option
+                            Log.d("Correct", "PlayContent:$option ")
+                            Log.d("Correct", "PlayContent:${item.answer} ")
+
+                            if (option == item.answer) {
+                                Log.d("Correct", "PlayContent:$option ")
+                                correctSelectedCount++ // Increment count if the selected option is correct
+                            } else{
+                                wrongSelectedCount++
+                            }
                         },
                         isExamCompleted = isExamCompleted,
                         choices = item.choices,
                     )
                 }
             }
-
-            if (isExamCompleted){
-                Button(
-                    onClick = {
-                        isExamCompleted = true
-                        timesClicked +=1
-                        onBackToHomeClicked()
-                    },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 20.dp),
-                    shape = MaterialTheme.shapes.small,
-                ) {
-                    Text(text = if (!isExamCompleted) "Submit" else "Back To Home")
-                }
-            }
-
         }
     }
 }

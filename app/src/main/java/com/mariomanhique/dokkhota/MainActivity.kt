@@ -11,6 +11,7 @@ import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.google.firebase.auth.FirebaseAuth
 import com.mariomanhique.dokkhota.ui.theme.DokkhotaApp
 import com.mariomanhique.dokkhota.ui.theme.DokkhotaTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -31,6 +32,7 @@ class MainActivity : ComponentActivity() {
             )
         super.onCreate(savedInstanceState)
 
+//        FirebaseAuth.getInstance().signOut()
 //        WindowCompat.setDecorFitsSystemWindows(window,false)
 
         setContent {
