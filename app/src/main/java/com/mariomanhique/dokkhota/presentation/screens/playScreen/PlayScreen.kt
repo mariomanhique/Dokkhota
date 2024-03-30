@@ -116,7 +116,7 @@ fun PlayScreen(
             },
             answeredQuestions = rightAnswers+wrongAnswers,
             totalQuestions = totalQuestions,
-            timeLeft = "00:00:${currentTime/1000L}",
+            timeLeft = currentTime/1000L,
             onSubmitClicked = { rating, comment->
 
                 if (FirebaseAuth.getInstance().currentUser != null){

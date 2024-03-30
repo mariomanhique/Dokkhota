@@ -5,15 +5,20 @@ import android.widget.Space
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.paddingFromBaseline
 import androidx.compose.foundation.text.ClickableText
+import androidx.compose.material3.BottomSheetDefaults
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -44,6 +49,7 @@ import com.mariomanhique.dokkhota.R
 import com.mariomanhique.dokkhota.presentation.components.InputTextField
 import com.mariomanhique.dokkhota.presentation.screens.profile.InputField
 import com.mariomanhique.dokkhota.ui.theme.AppColors
+import com.mariomanhique.dokkhota.util.formatSecondsToTime
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -51,7 +57,7 @@ fun SubmissionSheet(
     onSheetDismissed: () -> Unit,
     answeredQuestions: Int,
     totalQuestions: Int,
-    timeLeft: String,
+    timeLeft: Long,
     onSubmitClicked: (String,String) -> Unit
 ){
 
@@ -60,11 +66,13 @@ fun SubmissionSheet(
         mutableStateOf("")
     }
     ModalBottomSheet(
-        modifier = Modifier.fillMaxHeight(),
+        modifier = Modifier
+            .fillMaxSize(),
         onDismissRequest = {
             onSheetDismissed()
         },
     ) {
+        Box {
 
         Column(
             modifier = Modifier
@@ -121,7 +129,7 @@ fun SubmissionSheet(
             
             Text(
                 textAlign = TextAlign.Center,
-                text = "You answered $answeredQuestions out of $totalQuestions. Time left: $timeLeft. Are you willing to submit?")
+                text = "You answered $answeredQuestions out of $totalQuestions. Time left: ${formatSecondsToTime(timeLeft)}. Are you willing to submit?")
 
             Spacer(modifier = Modifier.height(20.dp))
 
@@ -145,6 +153,8 @@ fun SubmissionSheet(
 
 
         }
+
+    }
 
     }
 }

@@ -22,16 +22,19 @@ import dagger.hilt.android.AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
-            enableEdgeToEdge(
-                statusBarStyle = SystemBarStyle.light(
-                    Color.TRANSPARENT,
-                    Color.TRANSPARENT
-                )
-            )
+//            enableEdgeToEdge(
+//                statusBarStyle = SystemBarStyle.light(
+//                    Color.TRANSPARENT,
+//                    Color.TRANSPARENT
+//                ),
+//                navigationBarStyle = SystemBarStyle.light(
+//                    Color.TRANSPARENT,
+//                    Color.TRANSPARENT
+//                )
+//            )
         super.onCreate(savedInstanceState)
 
-//        FirebaseAuth.getInstance().signOut()
-//        WindowCompat.setDecorFitsSystemWindows(window,false)
+        WindowCompat.setDecorFitsSystemWindows(window,false)
 
         setContent {
             DokkhotaTheme {

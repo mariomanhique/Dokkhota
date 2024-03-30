@@ -118,14 +118,15 @@ fun DokkhotaApp(
     }
     Scaffold(
         modifier = Modifier
+            .fillMaxSize()
             .semantics {
                 testTagsAsResourceId = true
             }
-            .background(MaterialTheme.colorScheme.surface)
+            .background(MaterialTheme.colorScheme.surface),
 //            .safeContentPadding() // This puts padding around the  BottomBar
-            .imePadding()
-            .navigationBarsPadding()
-            .statusBarsPadding(),
+//            .imePadding()
+//            .navigationBarsPadding(),
+//            .statusBarsPadding(),
         containerColor = Color.Transparent,
         contentColor = MaterialTheme.colorScheme.onBackground,
         contentWindowInsets = WindowInsets(0, 0, 0, 0),
