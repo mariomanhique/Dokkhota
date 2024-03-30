@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.calculateEndPadding
 import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.fillMaxSize
@@ -84,9 +85,12 @@ fun ExamsListContent(
             ),
 //                fontWeight = FontWeight.ExtraBold,
         )
+        
+        Spacer(modifier = Modifier.height(10.dp))
 
         LazyColumn(
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier
+                .fillMaxSize()
                 .padding(horizontal = 24.dp)
 //                .navigationBarsPadding()
 //                .padding(top = paddingValues.calculateTopPadding())

@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeContentPadding
 import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.layout.size
@@ -36,6 +37,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -107,19 +109,23 @@ fun DokkhotaApp(
                 if (FirebaseAuth.getInstance().currentUser != null){
                     dialogState = true
                 }
+            },
+            onSignedIn = {
+                appState.navigateToSignIn()
+                isSheetOpen = false
             }
         )
     }
-
     Scaffold(
         modifier = Modifier
             .semantics {
                 testTagsAsResourceId = true
             }
-            .background(MaterialTheme.colorScheme.surface),
-//            .navigationBarsPadding(),
-//            .imePadding()
-//            .statusBarsPadding(),
+            .background(MaterialTheme.colorScheme.surface)
+//            .safeContentPadding() // This puts padding around the  BottomBar
+            .imePadding()
+            .navigationBarsPadding()
+            .statusBarsPadding(),
         containerColor = Color.Transparent,
         contentColor = MaterialTheme.colorScheme.onBackground,
         contentWindowInsets = WindowInsets(0, 0, 0, 0),
@@ -167,12 +173,14 @@ fun DokkhotaApp(
                         onNavigateToDestination = appState::navigateToTopLevelDestination,
                         currentDestination = appState.currentDestination,
                         modifier = Modifier
-                            .testTag("DiaryNavRail")
+                            .testTag("DokkhotaNavRail")
                             .safeDrawingPadding(),
                     )
                 }
             }
-            Column {
+            Column(
+                modifier = Modifier.fillMaxSize()
+            ) {
                 NavHost(appState = appState, onSplashDismissed = { /*TODO*/ }, paddingValues = paddingValues)
             }
         }

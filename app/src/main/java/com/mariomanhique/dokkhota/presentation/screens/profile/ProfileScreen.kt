@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -17,9 +16,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.google.firebase.auth.FirebaseAuth
 import com.mariomanhique.dokkhota.R
+import com.mariomanhique.dokkhota.model.Result
 import com.mariomanhique.dokkhota.presentation.components.CustomButton
 import com.mariomanhique.dokkhota.presentation.components.EmptyPage
 
@@ -30,7 +31,7 @@ fun ProfileScreen(
     onDeleteClicked: (Boolean) -> Unit,
     onLogoutClicked: (Boolean) -> Unit,
     navigateToSignIn: () -> Unit,
-    profileViewModel: ProfileViewModel,
+    profileViewModel: ProfileViewModel = hiltViewModel(),
     paddingValues: PaddingValues
 ){
 
@@ -39,7 +40,19 @@ fun ProfileScreen(
     val userData = profileViewModel.profile.collectAsStateWithLifecycle().value
 
     var username by remember {
-        mutableStateOf(userData?.username)
+        mutableStateOf("")
+    }
+
+    username = when(userData){
+        is Result.Success -> {
+            userData.data.username
+        }
+        is Result.Error -> {
+            "Null"
+        }
+        else -> {
+            "Loading..."
+        }
     }
  
     val context = LocalContext.current
@@ -49,7 +62,7 @@ fun ProfileScreen(
         Box {
                 ProfileContent(
                     imageProfile = profileState.image.value.image,
-                    username = username.toString(),
+                    username = username,
                     onSelectImage = {imageUrl->
                         val type = context.contentResolver.getType(imageUrl)?.split("/")?.last() ?: "jpg"
                         profileViewModel.addImage(

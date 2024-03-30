@@ -30,10 +30,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Check
-import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.rounded.Delete
-import androidx.compose.material.icons.rounded.ExitToApp
-import androidx.compose.material3.Divider
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -57,13 +54,10 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
-import androidx.core.net.toUri
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
-import com.mariomanhique.diaryapp.presentation.screens.profile.GalleryImage
 import com.mariomanhique.dokkhota.R
 import com.mariomanhique.dokkhota.presentation.components.ZoomableImage
 
@@ -168,56 +162,9 @@ fun ProfileCardInfo(
         }
 
         Spacer(modifier = Modifier.height(16.dp))
-        HorizontalDivider(
-            Modifier
-                .height(2.dp)
-        )
-
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 16.dp),
-            horizontalAlignment = Alignment.Start,
-            verticalArrangement = Arrangement.spacedBy(16.dp)
-        ) {
-
-            ClickableText(
-                title = R.string.deleteAll,
-                imageVector =Icons.Rounded.Delete,
-                onTextClicked = onDeleteClicked
-
-            )
-//            ClickableText(
-//                title = R.string.logout,
-//                imageVector =Icons.Rounded.ExitToApp,
-//                onTextClicked = onLogoutClicked
-//            )
-        }
-
     }
 }
 
-@Composable
-fun ClickableText(
-    @StringRes title: Int,
-    imageVector: ImageVector,
-    onTextClicked: (Boolean) -> Unit
-){
-    Row(
-        modifier = Modifier.clickable {
-            onTextClicked(true)
-        }
-    ) {
-        Text(
-            text = stringResource(id = title),
-            color = Color.Red
-        )
-        Icon(
-            imageVector = imageVector,
-            contentDescription = "")
-    }
-
-}
 
 @Composable
 fun UserDetailsCard(
@@ -379,27 +326,5 @@ fun InputField(
         )
     )
 }
-
-//@Preview(showBackground = true, widthDp = 320)
-//@Composable
-//fun ProfileCardInfoPreview(
-//){
-//    DiaryAppTheme {
-//        ProfileCardInfo(
-//            imageProfile = "".toUri(),
-//            username = "",
-//            onValueChanged = {},
-//            onSelectImage = {
-//
-//            },
-//            onUsernameUpdated = {},
-//            onDeleteClicked = {},
-//            onLogoutClicked = {},
-//            onImageUpdated = {},
-//            paddingValues = PaddingValues(5.dp)
-//            )
-//    }
-//}
-
 
 

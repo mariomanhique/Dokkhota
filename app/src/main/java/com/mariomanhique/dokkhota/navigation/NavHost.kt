@@ -37,29 +37,9 @@ fun NavHost(
     val profileViewModel: ProfileViewModel = hiltViewModel()
 
     NavHost(navController = navController, startDestination = startDestination){
-
-
-//        signInRoute(
-//            navigateToHome = {
-//                appState.navigateToTopLevelDestination(HOME)
-//            },
-//            navigateToSignUp = {
-//                navController.navigateToSignUp()
-//            }
-//        )
-//        signUpRoute(
-//            navigateToHome = {
-//                appState.navigateToTopLevelDestination(HOME)
-//            },
-//            navigateToSignIn = {
-//            navController.navigateToSignIn()
-//        })
-//
         homeRoute(
             paddingValues = paddingValues
         )
-
-
         examGraph(
             paddingValues = paddingValues,
             onCategoryClicked = {

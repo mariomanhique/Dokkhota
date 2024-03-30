@@ -30,7 +30,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
-import com.mariomanhique.diaryapp.presentation.screens.profile.GalleryImage
+import com.mariomanhique.dokkhota.presentation.screens.profile.GalleryImage
 
 @Composable
 fun ZoomableImage(

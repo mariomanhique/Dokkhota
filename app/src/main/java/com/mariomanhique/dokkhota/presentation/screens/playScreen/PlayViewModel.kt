@@ -12,6 +12,7 @@ import com.mariomanhique.dokkhota.data.repository.analyticsRepository.AnalyticsR
 import com.mariomanhique.dokkhota.data.repository.examsRepository.ExamsRepository
 import com.mariomanhique.dokkhota.data.repository.examsRepository.Questions
 import com.mariomanhique.dokkhota.model.Question
+import com.mariomanhique.dokkhota.model.Rating
 import com.mariomanhique.dokkhota.model.Result
 import com.mariomanhique.dokkhota.model.Score
 import com.mariomanhique.dokkhota.util.Constants
@@ -65,6 +66,33 @@ class PlayViewModel @Inject constructor(
             )
 
         }
+    }
+
+    fun saveRating(
+         stars: String = "",
+         comment: String = "",
+         onSuccess: () -> Unit,
+         onFailure: () -> Unit
+    ){
+        viewModelScope.launch {
+            val user = FirebaseAuth.getInstance().currentUser
+            if (user != null){
+                val result = analyticsRepository
+                    .SaveRating(
+                        rating = Rating(
+                            userId = user.uid,
+                            userEmail = user.email.toString(),
+                            stars = stars,
+                            comment = comment
+                        )
+                    )
+                when(result){
+                    is Result.Success -> onSuccess()
+                    else -> onFailure()
+                }
+            }
+        }
+
     }
 
     fun saveOrUpdateScore(

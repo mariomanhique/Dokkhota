@@ -7,16 +7,14 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.auth.FirebaseAuth
-import com.mariomanhique.diaryapp.presentation.screens.profile.GalleryImage
-import com.mariomanhique.diaryapp.presentation.screens.profile.ProfileState
 import com.mariomanhique.dokkhota.data.repository.profileRepository.ProfileRepository
-import com.mariomanhique.dokkhota.model.UserData
+import com.mariomanhique.dokkhota.model.User
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import com.mariomanhique.dokkhota.model.Result
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -24,51 +22,48 @@ import javax.inject.Inject
 @HiltViewModel
 class ProfileViewModel @Inject constructor(
     private val profileRepository: ProfileRepository,
-//    private val imageRepository: ImageRepositoryInterface
 ): ViewModel() {
 
     val profileState = ProfileState()
 
-    private var _userData: MutableStateFlow<UserData> =
-        MutableStateFlow(UserData("","",""))
+    private var _userData: MutableStateFlow<Result<User>> = MutableStateFlow(Result.Loading)
 
     val userData = _userData.asStateFlow()
 
-    val profile: StateFlow<UserData?> =
+    val profile: StateFlow<Result<User>> =
                     profileRepository
-                        .getProfile()
-                        .stateIn(
+                        .getProfile().stateIn(
                             scope = viewModelScope,
                             started = SharingStarted.Eagerly,
-                            initialValue = UserData("","","")
+                            initialValue = Result.Loading
                         )
 
     init {
-        getCurrentUser()
+//        getCurrentUser()
     }
-    private fun getCurrentUser(){
-        viewModelScope.launch {
-            profileRepository.getProfile().collect{userData->
-                userData?.let {
-                   fetchImageFromFirebase(
-                       remoteImagePath = it.profilePictureUrl.toString(),
-                       onImageDownload = {downloadedImage->
-                           profileState.addImageProfile(
-                               GalleryImage(
-                                   image = downloadedImage,
-                                   remoteImagePath = extractImagePath(
-                                       fullImageUrl = downloadedImage.toString()
-                                   )
-                               )
-                           )
-                       },
-                       onImageDownloadFailed = {}
-                   )
-                   _userData.value = it
-               }
-            }
-        }
-    }
+//    private fun getCurrentUser(){
+//        viewModelScope.launch {
+//            profileRepository.getProfile().collect{user->
+//                user.let {
+//                   fetchImageFromFirebase(
+//                       remoteImagePath = it,
+//                       onImageDownload = {downloadedImage->
+//                           profileState.addImageProfile(
+//                               GalleryImage(
+//                                   image = downloadedImage,
+//                                   remoteImagePath = extractImagePath(
+//                                       fullImageUrl = downloadedImage.toString()
+//                                   )
+//                               )
+//                           )
+//                       },
+//                       onImageDownloadFailed = {}
+//                   )
+//                   _userData.value = it
+//               }
+//            }
+//        }
+//    }
 
     fun addImage(
         image: Uri,
@@ -95,18 +90,7 @@ class ProfileViewModel @Inject constructor(
             val imagePath = storage.child(galleryImage.remoteImagePath)
 
             imagePath.putFile(galleryImage.image).addOnProgressListener{
-                val sessionUri = it.uploadSessionUri
-//                if (sessionUri != null) {
-//                    viewModelScope.launch(Dispatchers.IO) {
-//                        imageRepository.addImageToUpload(
-//                            ImageToUpload(
-//                                remoteImagePath = galleryImage.remoteImagePath,
-//                                imageUri = galleryImage.image.toString(),
-//                                sessionUri = sessionUri.toString()
-//                            )
-//                        )
-//                    }
-//                }
+                it.uploadSessionUri
             }
         }
     }

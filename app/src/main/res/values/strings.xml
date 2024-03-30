@@ -35,4 +35,7 @@
     <string name="attempts">Attempts</string>
 
 
+    <string name="comment">Write Here (Optional)</string>
+
+
 </resources>

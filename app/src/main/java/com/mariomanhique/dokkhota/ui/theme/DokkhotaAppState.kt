@@ -14,6 +14,7 @@ import androidx.tracing.trace
 import com.mariomanhique.dokkhota.navigation.TopLevelDestination
 import com.mariomanhique.dokkhota.presentation.screens.analytics.navigation.analyticsRoute
 import com.mariomanhique.dokkhota.presentation.screens.analytics.navigation.navigateToAnalytics
+import com.mariomanhique.dokkhota.presentation.screens.authentication.signIn.navigation.navigateToSignIn
 import com.mariomanhique.dokkhota.presentation.screens.exam.navigation.examRoute
 import com.mariomanhique.dokkhota.presentation.screens.exam.navigation.examsListRoute
 import com.mariomanhique.dokkhota.presentation.screens.exam.navigation.navigateToExamsGraph
@@ -106,5 +107,8 @@ class DokkhotaAppState(
     }
 
 
+    fun navigateToSignIn(){
+        navController.navigateToSignIn()
+    }
 
 }

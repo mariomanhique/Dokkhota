@@ -1,5 +1,6 @@
 package com.mariomanhique.dokkhota.data.repository.analyticsRepository
 
+import com.mariomanhique.dokkhota.model.Rating
 import com.mariomanhique.dokkhota.model.Result
 import com.mariomanhique.dokkhota.model.Score
 import kotlinx.coroutines.flow.Flow
@@ -23,4 +24,8 @@ interface AnalyticsRepository {
    suspend fun getSingleExamScore(
         examNr: String
     ): Result<Score>
+
+   suspend fun SaveRating(
+       rating: Rating,
+   ):Result<Boolean>
 }

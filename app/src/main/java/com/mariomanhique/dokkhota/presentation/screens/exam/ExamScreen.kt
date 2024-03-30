@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.paddingFromBaseline
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
@@ -42,8 +43,7 @@ fun ExamScreen(
 ){
     
     val categories by examsViewModel.categories.collectAsStateWithLifecycle()
-    
-    
+
     if (categories.isNotEmpty()){
         ExamContent(
             categories = categories,
@@ -51,7 +51,7 @@ fun ExamScreen(
             paddingValues = paddingValues
         )
     }
-    
+
 }
 
 @Composable
@@ -61,9 +61,9 @@ fun ExamContent(
     paddingValues: PaddingValues
 ){
     LazyColumn(
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier
+            .fillMaxSize()
             .padding(horizontal = 24.dp)
-            .navigationBarsPadding()
 //            .padding(top = paddingValues.calculateTopPadding())
             .padding(bottom = paddingValues.calculateBottomPadding())
             .padding(start = paddingValues.calculateStartPadding(LayoutDirection.Ltr))
@@ -79,8 +79,7 @@ fun ExamContent(
                     fontSize = 30.sp
                 ),
 //                fontWeight = FontWeight.ExtraBold,
-                )
-
+            )
         }
         
         items(items = categories){category->

@@ -54,8 +54,5 @@ fun HomeScreen(
     var padding by remember { mutableStateOf(PaddingValues()) }
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
 
-    HomeContent(paddingValues = paddingValues) {
-
-    }
 
 }

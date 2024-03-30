@@ -11,6 +11,7 @@ import com.google.firebase.firestore.FirestoreRegistrar
 import com.google.firebase.firestore.snapshots
 import com.google.firebase.firestore.toObjects
 import com.mariomanhique.dokkhota.data.repository.authRepository.utils.await
+import com.mariomanhique.dokkhota.model.Rating
 import com.mariomanhique.dokkhota.model.Result
 import com.mariomanhique.dokkhota.model.Score
 import kotlinx.coroutines.flow.Flow
@@ -25,7 +26,8 @@ class AnalyticsRepositoryImpl @Inject constructor():AnalyticsRepository {
     private lateinit var updatedScore: Result<String>
     private lateinit var singleScore: Result<Score>
 
-   private  val ref = FirebaseFirestore.getInstance().collection("score")
+   private val ref = FirebaseFirestore.getInstance().collection("score")
+   private val ratingRef = FirebaseFirestore.getInstance().collection("rating")
    override suspend fun saveExamScore(
      score: Score
    ): Result<Boolean> {
@@ -101,6 +103,17 @@ class AnalyticsRepositoryImpl @Inject constructor():AnalyticsRepository {
             }
         } else {
             Result.Error(exception = FirebaseAuthInvalidUserException("Error", "Invalid User"))
+        }
+    }
+
+    override suspend fun SaveRating(rating: Rating,): Result<Boolean> {
+        return try {
+            val result = ratingRef.document(rating.userId)
+                .set(rating).isSuccessful
+
+            Result.Success(result)
+        } catch (e: FirebaseFirestoreException){
+            Result.Error(exception = e)
         }
     }
 }

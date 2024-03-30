@@ -30,13 +30,12 @@ fun NavGraphBuilder.profileRoute(
 
     composable(route = profileRoute){
         val context = LocalContext.current
-        val viewModel: HomeViewModel = hiltViewModel()
         val scope = rememberCoroutineScope()
         var signOutDialogState by remember { mutableStateOf(false) }
         var deleteAllDialogOpened by remember { mutableStateOf(false) }
 
         ProfileScreen(
-            profileViewModel = profileViewModel,
+//            profileViewModel = profileViewModel,
             onDeleteClicked = {
                 deleteAllDialogOpened = it
                 Toast.makeText(context, "$it", Toast.LENGTH_SHORT).show()

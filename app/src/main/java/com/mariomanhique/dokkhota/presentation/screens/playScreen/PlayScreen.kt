@@ -19,7 +19,6 @@ import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.DoneAll
-import androidx.compose.material3.Button
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LinearProgressIndicator
@@ -55,9 +54,10 @@ import com.mariomanhique.dokkhota.model.Result
 import com.mariomanhique.dokkhota.presentation.components.CustomDialog
 import com.mariomanhique.dokkhota.presentation.components.EmptyPage
 import com.mariomanhique.dokkhota.presentation.screens.analytics.AnalyticsViewModel
+import com.mariomanhique.dokkhota.ui.theme.AppColors
 import com.mariomanhique.dokkhota.util.HandleBackButtonPress
+import com.mariomanhique.dokkhota.util.formatSecondsToTime
 import kotlinx.coroutines.delay
-import kotlin.math.log
 
 @Composable
 fun PlayScreen(
@@ -80,29 +80,65 @@ fun PlayScreen(
     var wrongAnswers by remember {
         mutableIntStateOf(0)
     }
-
-//    var attempts by remember {
-//        mutableIntStateOf(0)
-//    }
+    var currentTime by remember {
+        mutableLongStateOf(0L)
+    }
     val examNr = playViewModel._examNr.value
     val attempts = playViewModel._attempts.value
     val category = playViewModel._category.value
-    var sheetState by remember {
+    var resultSheetState by remember {
+        mutableStateOf(false)
+    }
+
+    var submissionSheetState by remember {
         mutableStateOf(false)
     }
 
     val context = LocalContext.current
 
     
-    if (sheetState){
+    if (resultSheetState){
         ResultSheet(
             onSheetDismissed = {
-                sheetState = false
+                resultSheetState = false
             },
             totalQuestions = totalQuestions,
             correctAnswers = rightAnswers,
             wrongAnswers = wrongAnswers,
             attempts = attempts
+        )
+    }
+
+    if (submissionSheetState){
+        SubmissionSheet(
+            onSheetDismissed = {
+               submissionSheetState = false
+            },
+            answeredQuestions = rightAnswers+wrongAnswers,
+            totalQuestions = totalQuestions,
+            timeLeft = "00:00:${currentTime/1000L}",
+            onSubmitClicked = { rating, comment->
+
+                if (FirebaseAuth.getInstance().currentUser != null){
+                    playViewModel.saveRating(
+                        stars = rating,
+                        comment = comment,
+                        onSuccess = {},
+                        onFailure = {}
+                    )
+
+                    resultSheetState = true
+                    submissionSheetState = false
+
+                    playViewModel.saveOrUpdateScore(
+                        category = category,
+                        examNr = examNr,
+                        percentage = ((rightAnswers*100)/totalQuestions).toLong(),
+                        onSuccess = {},
+                        onFailure = {}
+                    )
+                }
+            }
         )
     }
 
@@ -119,20 +155,17 @@ fun PlayScreen(
                     onBackToHomeClicked = onBackToHomeClicked,
                     popBackStack = popBackStack,
                     navigateToSignIn = navigateToSignIn,
-                    onScoreSaved = {rAnswers, wAnswers->
+                    onScoreSaved = { rAnswers, wAnswers, cTime ->
                         Log.d("CorrectAnswers", "PlayScreen:$rAnswers")
                         rightAnswers = rAnswers
                         wrongAnswers = wAnswers
+                        currentTime = cTime
 
-                        sheetState = true
-
-                        playViewModel.saveOrUpdateScore(
-                            category = category,
-                            examNr = examNr,
-                            percentage = ((rAnswers*100)/examQuestions.count()).toLong(),
-                            onSuccess = {},
-                            onFailure = {}
-                        )
+                        if (FirebaseAuth.getInstance().currentUser != null){
+                            submissionSheetState = true
+                        }else{
+                            resultSheetState = true
+                        }
 
                     }
                 )
@@ -157,7 +190,7 @@ fun PlayScreen(
 fun PlayContent(
      questions: List<Question>,
      paddingValues: PaddingValues,
-     onScoreSaved: (Int,Int) -> Unit,
+     onScoreSaved: (Int,Int,Long) -> Unit,
      onBackToHomeClicked: () -> Unit,
      navigateToSignIn: () -> Unit,
      popBackStack: () -> Unit,
@@ -216,7 +249,7 @@ fun PlayContent(
 
     // The timer starts when the composable is first composed
     LaunchedEffect(Unit) {
-        startTimer(10 * 1000L) // Start the timer with 10 seconds (10 * 1000 milliseconds)
+        startTimer(10 * 10000L) // Start the timer with 10 seconds (10 * 1000 milliseconds)
     }
 
     if (!isTimerRunning){
@@ -224,14 +257,22 @@ fun PlayContent(
     }
 
     if (isExamCompleted && !isScoreSaved) {
-        if (FirebaseAuth.getInstance().currentUser != null) {
-            onScoreSaved(correctSelectedCount, wrongSelectedCount)
+//        if (FirebaseAuth.getInstance().currentUser != null) {
+            onScoreSaved(correctSelectedCount, wrongSelectedCount, currentTime)
             isScoreSaved = true
-//            Log.d("Save", "PlayContent: ")
-        }
+//        }
     }
 
     Scaffold(
+        topBar = {
+         PlayTopBar(
+             examCategory = "",
+             timer = formatSecondsToTime(seconds = currentTime/1000L),
+             popBackStack = {
+                 popBackStack()
+             }
+         )
+        },
         floatingActionButton = {
             FloatingActionButton(
                 modifier = Modifier
@@ -240,7 +281,8 @@ fun PlayContent(
                 onClick ={
                     isExamCompleted = true
                     isTimerRunning = false
-                }
+                },
+                containerColor = AppColors.AppBlue
             ) {
                 Box(
                     modifier = Modifier
@@ -264,23 +306,23 @@ fun PlayContent(
                         modifier = Modifier.fillMaxWidth(),
                         progress = { progress }
                     )
-                if (isExamCompleted) {
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween
-                    ) {
-                        TextButton(onClick = {
-                            popBackStack()
-                        }) {
-                            Text(text = "Back")
-                        }
-                        TextButton(onClick = {
-                            navigateToSignIn()
-                        }) {
-                            Text(text = "Check Performance")
-                        }
-                    }
-                }
+//                if (isExamCompleted) {
+//                    Row(
+//                        modifier = Modifier.fillMaxWidth(),
+//                        horizontalArrangement = Arrangement.SpaceBetween
+//                    ) {
+//                        TextButton(onClick = {
+//                            popBackStack()
+//                        }) {
+//                            Text(text = "Back")
+//                        }
+//                        TextButton(onClick = {
+//                            navigateToSignIn()
+//                        }) {
+//                            Text(text = "Check Performance")
+//                        }
+//                    }
+//                }
 
                 LazyColumn (
                     modifier = Modifier

@@ -22,6 +22,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.google.firebase.auth.FirebaseAuth
@@ -51,8 +52,11 @@ fun ResultSheet(
             horizontalAlignment = Alignment.CenterHorizontally
 
         ) {
-            Text(text = "Find your results here. Know that to see your saved performance you have to have an account")
+            Text(
+                textAlign = TextAlign.Center,
+                text = "Find your results here. Know that to see your saved performance you have to have an account")
 
+            Spacer(modifier = Modifier.height(10.dp))
             HorizontalDivider()
             Spacer(modifier = Modifier.height(40.dp))
 
@@ -78,11 +82,14 @@ fun ResultSheet(
                     color = Color.Red
                 )
 
-                ResultCard(
-                    resultTitle = R.string.attempts,
-                    resultCount = attempts,
-                    color = MaterialTheme.colorScheme.secondary
-                )
+                if (FirebaseAuth.getInstance().currentUser != null){
+                    ResultCard(
+                        resultTitle = R.string.attempts,
+                        resultCount = attempts,
+                        color = MaterialTheme.colorScheme.secondary
+                    )
+                }
+
             }
         }
 

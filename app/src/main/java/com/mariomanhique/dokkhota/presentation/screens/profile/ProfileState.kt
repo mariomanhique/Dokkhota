@@ -1,4 +1,4 @@
-package com.mariomanhique.diaryapp.presentation.screens.profile
+package com.mariomanhique.dokkhota.presentation.screens.profile
 
 import android.net.Uri
 import androidx.compose.runtime.Composable

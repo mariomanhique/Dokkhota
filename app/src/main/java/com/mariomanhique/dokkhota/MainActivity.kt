@@ -3,6 +3,7 @@ package com.mariomanhique.dokkhota
 import android.graphics.Color
 import android.os.Bundle
 import androidx.activity.ComponentActivity
+import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.material3.Text
@@ -11,6 +12,7 @@ import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.core.view.WindowCompat
 import com.google.firebase.auth.FirebaseAuth
 import com.mariomanhique.dokkhota.ui.theme.DokkhotaApp
 import com.mariomanhique.dokkhota.ui.theme.DokkhotaTheme
@@ -21,14 +23,10 @@ class MainActivity : ComponentActivity() {
     @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
             enableEdgeToEdge(
-//                statusBarStyle = SystemBarStyle.light(
-//                    Color.TRANSPARENT,
-//                    Color.TRANSPARENT,
-//                ),
-//                navigationBarStyle = SystemBarStyle.auto(
-//                    lightScrim,
-//                    darkScrim,
-//                ) ,
+                statusBarStyle = SystemBarStyle.light(
+                    Color.TRANSPARENT,
+                    Color.TRANSPARENT
+                )
             )
         super.onCreate(savedInstanceState)
 
@@ -37,8 +35,6 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             DokkhotaTheme {
-                // A surface container using the 'background' color from the theme
-
                 DokkhotaApp(windowSizeClass = calculateWindowSizeClass(this))
             }
         }

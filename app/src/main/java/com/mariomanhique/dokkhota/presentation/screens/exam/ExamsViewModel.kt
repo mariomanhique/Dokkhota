@@ -30,6 +30,7 @@ class ExamsViewModel @Inject constructor(
     private var _categories = MutableStateFlow<List<String>>(emptyList())
     val categories = _categories.asStateFlow()
 
+
     init {
         getCategories()
 
