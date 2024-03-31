@@ -6,15 +6,10 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.calculateEndPadding
-import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.paddingFromBaseline
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
@@ -25,15 +20,17 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import coil.compose.AsyncImage
-import com.mariomanhique.dokkhota.R
+import kotlinx.coroutines.launch
 
 @Composable
 fun ExamsListScreen(
@@ -43,37 +40,71 @@ fun ExamsListScreen(
 ){
 
 
+    val scope = rememberCoroutineScope()
     val examsList by examsListViewModel.exams.collectAsStateWithLifecycle()
-
     val category by examsListViewModel.category.collectAsStateWithLifecycle()
 
     examsList?.let {
         ExamsListContent(
+            onExamClicked = {examN->
+                scope.launch {
+                    examsListViewModel.setExamNr(examN)
+                }
+            },
             paddingValues = paddingValues,
-            onExamClicked = {examNr->
-            category?.let { category -> onExamClicked(examNr, category) }
-        }, examsCount = it,
+            onStartClicked = {examNr->
+
+                category?.let { category -> onExamClicked(examNr, category) }
+            }, examsCount = it,
             category = category.toString()
         )
+
     }
 
+
     Log.d("Exams", "ExamsListScreen: $examsList + $category")
-
-
 }
 
 @Composable
 fun ExamsListContent(
-    paddingValues: PaddingValues,
     onExamClicked: (String) -> Unit,
+    paddingValues: PaddingValues,
+    onStartClicked: (String) -> Unit,
     examsCount: List<String>,
     category: String
 ){
 
+    var confirmSheetState by remember {
+        mutableStateOf(false)
+    }
+
+    var examN by remember {
+        mutableStateOf("")
+    }
+
+
+    if (confirmSheetState){
+        ConfirmSheet(
+            onSheetDismissed = {
+                confirmSheetState = false
+            },
+            onStartClicked = {
+                onStartClicked(examN)
+                confirmSheetState = false
+            },
+            onCancelClicked = {
+                confirmSheetState = false
+            },
+            examN = examN,
+            category = category,
+            totalQuestions = examsCount.count(),
+        )
+    }
+
+
     Column(
         modifier = Modifier
             .fillMaxSize(),
-//            .padding(paddingValues),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Top
     ) {
@@ -92,16 +123,16 @@ fun ExamsListContent(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(horizontal = 24.dp)
-//                .navigationBarsPadding()
-//                .padding(top = paddingValues.calculateTopPadding())
-//                .padding(bottom = paddingValues.calculateBottomPadding())
-//                .padding(start = paddingValues.calculateStartPadding(LayoutDirection.Ltr))
-//                .padding(end = paddingValues.calculateEndPadding(LayoutDirection.Ltr))
         ) {
 
             items(items = examsCount){
                 ExamCard(
-                    onExamClicked = onExamClicked,
+                    onExamClicked = {examNumber->
+                        confirmSheetState = true
+                        examN = examNumber
+
+                        onExamClicked(examNumber)
+                    },
                     examN = it
                 )
             }

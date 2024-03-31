@@ -53,7 +53,6 @@ import com.mariomanhique.dokkhota.model.Question
 import com.mariomanhique.dokkhota.model.Result
 import com.mariomanhique.dokkhota.presentation.components.CustomDialog
 import com.mariomanhique.dokkhota.presentation.components.EmptyPage
-import com.mariomanhique.dokkhota.presentation.screens.analytics.AnalyticsViewModel
 import com.mariomanhique.dokkhota.ui.theme.AppColors
 import com.mariomanhique.dokkhota.util.HandleBackButtonPress
 import com.mariomanhique.dokkhota.util.formatSecondsToTime
@@ -66,7 +65,6 @@ fun PlayScreen(
     navigateToSignIn: () -> Unit,
     popBackStack: () -> Unit,
     playViewModel: PlayViewModel = hiltViewModel(),
-    analyticsViewModel: AnalyticsViewModel = hiltViewModel()
 ){
     val questions by playViewModel.exams.collectAsStateWithLifecycle()
     var totalQuestions by remember {

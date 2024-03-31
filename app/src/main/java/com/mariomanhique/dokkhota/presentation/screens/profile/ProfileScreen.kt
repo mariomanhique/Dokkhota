@@ -1,6 +1,7 @@
 package com.mariomanhique.dokkhota.presentation.screens.profile
 
 import android.annotation.SuppressLint
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -8,6 +9,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -28,8 +30,6 @@ import com.mariomanhique.dokkhota.presentation.components.EmptyPage
 @Composable
 fun ProfileScreen(
     modifier: Modifier = Modifier,
-    onDeleteClicked: (Boolean) -> Unit,
-    onLogoutClicked: (Boolean) -> Unit,
     navigateToSignIn: () -> Unit,
     profileViewModel: ProfileViewModel = hiltViewModel(),
     paddingValues: PaddingValues
@@ -43,17 +43,23 @@ fun ProfileScreen(
         mutableStateOf("")
     }
 
-    username = when(userData){
-        is Result.Success -> {
-            userData.data.username
-        }
-        is Result.Error -> {
-            "Null"
-        }
-        else -> {
-            "Loading..."
+    LaunchedEffect(userData) {
+        when(userData){
+            is Result.Success -> {
+                username = userData.data.username
+                Log.d("User", "ProfileScreen: ${userData.data.username}")
+            }
+            is Result.Error -> {
+                Log.d("User", "ProfileScreen: $username")
+
+            }
+            else -> {
+                Log.d("User", "ProfileScreen: Loading")
+            }
         }
     }
+
+
  
     val context = LocalContext.current
     val profileState = profileViewModel.profileState
@@ -78,8 +84,6 @@ fun ProfileScreen(
                     onValueChanged = {
                         username = it
                     },
-                    onDeleteClicked = onDeleteClicked,
-                    onLogoutClicked = onLogoutClicked,
                     onImageUpdated = {
                         profileViewModel.updateImageProfile(
                             profileState.image.value.remoteImagePath

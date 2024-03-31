@@ -13,11 +13,8 @@ import com.mariomanhique.dokkhota.presentation.screens.authentication.signIn.nav
 import com.mariomanhique.dokkhota.presentation.screens.authentication.signIn.navigation.signInRoute
 import com.mariomanhique.dokkhota.presentation.screens.exam.navigation.EXAMS_GRAPH_ROUTE_PATTERN
 import com.mariomanhique.dokkhota.presentation.screens.exam.navigation.examGraph
-import com.mariomanhique.dokkhota.presentation.screens.exam.navigation.examRoute
 import com.mariomanhique.dokkhota.presentation.screens.exam.navigation.examsListRoute
 import com.mariomanhique.dokkhota.presentation.screens.exam.navigation.navigateToExamsList
-import com.mariomanhique.dokkhota.presentation.screens.home.navigation.homeRoute
-import com.mariomanhique.dokkhota.presentation.screens.home.navigation.navigateToHome
 import com.mariomanhique.dokkhota.presentation.screens.playScreen.navigation.navigateToPlay
 import com.mariomanhique.dokkhota.presentation.screens.playScreen.navigation.playRoute
 import com.mariomanhique.dokkhota.presentation.screens.profile.ProfileViewModel
@@ -33,13 +30,9 @@ fun NavHost(
 ){
 
     val navController = appState.navController
-    val destination = appState.currentDestination?.route
     val profileViewModel: ProfileViewModel = hiltViewModel()
 
     NavHost(navController = navController, startDestination = startDestination){
-        homeRoute(
-            paddingValues = paddingValues
-        )
         examGraph(
             paddingValues = paddingValues,
             onCategoryClicked = {
@@ -86,7 +79,6 @@ fun NavHost(
 
 
         profileRoute(
-            profileViewModel = profileViewModel,
             navigateToSignIn = navController::navigateToSignIn,
             paddingValues = paddingValues
         )

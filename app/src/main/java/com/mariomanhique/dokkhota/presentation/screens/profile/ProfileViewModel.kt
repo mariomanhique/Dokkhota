@@ -32,15 +32,16 @@ class ProfileViewModel @Inject constructor(
 
     val profile: StateFlow<Result<User>> =
                     profileRepository
-                        .getProfile().stateIn(
+                        .getProfile()
+                        .stateIn(
                             scope = viewModelScope,
                             started = SharingStarted.Eagerly,
                             initialValue = Result.Loading
                         )
 
-    init {
+//    init {
 //        getCurrentUser()
-    }
+//    }
 //    private fun getCurrentUser(){
 //        viewModelScope.launch {
 //            profileRepository.getProfile().collect{user->

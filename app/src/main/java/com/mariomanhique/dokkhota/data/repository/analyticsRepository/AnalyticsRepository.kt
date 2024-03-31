@@ -25,7 +25,7 @@ interface AnalyticsRepository {
         examNr: String
     ): Result<Score>
 
-   suspend fun SaveRating(
+   suspend fun saveRating(
        rating: Rating,
    ):Result<Boolean>
 }

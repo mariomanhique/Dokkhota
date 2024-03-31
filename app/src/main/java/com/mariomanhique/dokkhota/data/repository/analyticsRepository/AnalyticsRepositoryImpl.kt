@@ -23,9 +23,6 @@ import javax.inject.Inject
 
 class AnalyticsRepositoryImpl @Inject constructor():AnalyticsRepository {
 
-    private lateinit var updatedScore: Result<String>
-    private lateinit var singleScore: Result<Score>
-
    private val ref = FirebaseFirestore.getInstance().collection("score")
    private val ratingRef = FirebaseFirestore.getInstance().collection("rating")
    override suspend fun saveExamScore(
@@ -106,7 +103,7 @@ class AnalyticsRepositoryImpl @Inject constructor():AnalyticsRepository {
         }
     }
 
-    override suspend fun SaveRating(rating: Rating,): Result<Boolean> {
+    override suspend fun saveRating(rating: Rating,): Result<Boolean> {
         return try {
             val result = ratingRef.document(rating.userId)
                 .set(rating).isSuccessful

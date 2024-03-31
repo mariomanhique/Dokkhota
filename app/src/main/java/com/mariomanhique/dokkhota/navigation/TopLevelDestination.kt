@@ -28,12 +28,7 @@ enum class TopLevelDestination(
     val iconTextId: Int,
     val titleTextId: Int
 ) {
-//    HOME(
-//        selectedIcon = Icons.Rounded.Home,
-//        unselectedIcon = Icons.Outlined.Home,
-//        iconTextId = R.string.home,
-//        titleTextId = R.string.app_name
-//    ),
+
     EXAM(
         selectedIcon = Icons.Rounded.Home,
         unselectedIcon = Icons.Outlined.Home,

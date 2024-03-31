@@ -18,16 +18,13 @@ import com.mariomanhique.dokkhota.model.Score
 import com.mariomanhique.dokkhota.util.Constants
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
-@OptIn(ExperimentalCoroutinesApi::class)
 @HiltViewModel
 class PlayViewModel @Inject constructor(
     private val examsRepository: ExamsRepository,
@@ -78,7 +75,7 @@ class PlayViewModel @Inject constructor(
             val user = FirebaseAuth.getInstance().currentUser
             if (user != null){
                 val result = analyticsRepository
-                    .SaveRating(
+                    .saveRating(
                         rating = Rating(
                             userId = user.uid,
                             userEmail = user.email.toString(),

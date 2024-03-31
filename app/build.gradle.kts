@@ -4,6 +4,7 @@ plugins {
     id("com.google.devtools.ksp")
     id("com.google.gms.google-services")
     id("com.google.dagger.hilt.android")
+    kotlin("plugin.serialization") version "1.9.22"
 }
 
 
@@ -117,12 +118,7 @@ dependencies {
       implementation("com.google.dagger:hilt-android:2.49")
       ksp("com.google.dagger:hilt-compiler:2.48.1")
       implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
-//
-//    implementation("androidx.room:room-runtime:2.6.1")
-//    annotationProcessor("androidx.room:room-compiler:2.6.1")
-//    ksp("androidx.room:room-compiler:2.6.1")
-//    implementation("androidx.room:room-ktx:2.6.1")
-//
+
     implementation(platform("com.google.firebase:firebase-bom:32.7.4"))
 //
 //    implementation("com.google.firebase:firebase-analytics")
@@ -171,15 +167,15 @@ dependencies {
     implementation("androidx.compose.material3:material3-window-size-class")
     implementation("androidx.tracing:tracing-ktx:1.2.0")
 //
-//    implementation("androidx.datastore:datastore:1.0.0")
+    implementation("androidx.datastore:datastore:1.0.0")
 //    implementation("com.google.protobuf:protobuf-javalite:3.24.4")
 //    implementation("com.google.protobuf:protobuf-kotlin-lite:3.24.4")
 //    implementation("io.grpc:grpc-kotlin-stub:1.3.0")
 //    implementation("com.google.protobuf:protoc:3.24.4")
 //
-//    implementation("org.jetbrains.kotlinx:kotlinx-collections-immutable:0.3.5")
-//    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0")
-//
+    implementation("org.jetbrains.kotlinx:kotlinx-collections-immutable:0.3.5")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0")
+
 //    implementation("com.squareup.okhttp3:logging-interceptor:4.12.0" )
 //    implementation("com.squareup.retrofit2:retrofit:2.9.0")
 //    implementation("com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:1.0.0")

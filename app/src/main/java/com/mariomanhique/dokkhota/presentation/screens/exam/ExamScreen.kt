@@ -9,11 +9,9 @@ import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.paddingFromBaseline
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
@@ -64,8 +62,6 @@ fun ExamContent(
         modifier = Modifier
             .fillMaxSize()
             .padding(horizontal = 24.dp)
-//            .padding(top = paddingValues.calculateTopPadding())
-            .padding(bottom = paddingValues.calculateBottomPadding())
             .padding(start = paddingValues.calculateStartPadding(LayoutDirection.Ltr))
             .padding(end = paddingValues.calculateEndPadding(LayoutDirection.Ltr)),
         verticalArrangement = Arrangement.Top,
@@ -78,7 +74,6 @@ fun ExamContent(
                 style = MaterialTheme.typography.titleLarge.copy(
                     fontSize = 30.sp
                 ),
-//                fontWeight = FontWeight.ExtraBold,
             )
         }
         

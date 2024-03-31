@@ -3,7 +3,6 @@ package com.mariomanhique.dokkhota.presentation.screens.playScreen
 import androidx.compose.foundation.clickable
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -29,8 +28,8 @@ fun PlayTopBar(
                  imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                  contentDescription = null)
         },
-    actions = {
-        Text(text = timer)
-    }
-        )
+        actions = {
+            Text(text = timer)
+        }
+    )
 }

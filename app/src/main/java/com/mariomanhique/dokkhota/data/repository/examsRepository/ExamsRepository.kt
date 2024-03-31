@@ -1,5 +1,6 @@
 package com.mariomanhique.dokkhota.data.repository.examsRepository
 
+import com.mariomanhique.dokkhota.model.Exam
 import com.mariomanhique.dokkhota.model.Question
 import com.mariomanhique.dokkhota.model.Result
 import kotlinx.coroutines.flow.Flow
@@ -18,4 +19,9 @@ interface ExamsRepository {
     suspend fun getExamsList(
         category: String
     ): Flow<List<String>>
+
+    fun getExamDetails(
+        examNr: String,
+        category: String
+    ):Flow<Result<Exam>>
 }

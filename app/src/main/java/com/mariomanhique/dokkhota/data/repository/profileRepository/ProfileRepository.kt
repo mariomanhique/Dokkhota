@@ -3,7 +3,6 @@ package com.mariomanhique.dokkhota.data.repository.profileRepository
 import com.mariomanhique.dokkhota.model.RequestState
 import com.mariomanhique.dokkhota.model.Result
 import com.mariomanhique.dokkhota.model.User
-import com.mariomanhique.dokkhota.model.UserData
 import kotlinx.coroutines.flow.Flow
 
 interface ProfileRepository {

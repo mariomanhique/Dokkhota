@@ -9,7 +9,4 @@ data class Score(
     val userID: String ="",
     val attempts: Int = 0,
     val percentage: Long = 0L,
-//    val rightAnswers: Int,
-//    val wrongAnswers: Int,
-//    val totalQuestions: Int
 )

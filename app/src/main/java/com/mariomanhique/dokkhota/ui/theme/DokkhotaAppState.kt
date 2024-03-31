@@ -18,8 +18,6 @@ import com.mariomanhique.dokkhota.presentation.screens.authentication.signIn.nav
 import com.mariomanhique.dokkhota.presentation.screens.exam.navigation.examRoute
 import com.mariomanhique.dokkhota.presentation.screens.exam.navigation.examsListRoute
 import com.mariomanhique.dokkhota.presentation.screens.exam.navigation.navigateToExamsGraph
-import com.mariomanhique.dokkhota.presentation.screens.home.navigation.homeRoute
-import com.mariomanhique.dokkhota.presentation.screens.home.navigation.navigateToHome
 import com.mariomanhique.dokkhota.presentation.screens.profile.navigation.navigateToProfile
 import com.mariomanhique.dokkhota.presentation.screens.profile.navigation.profileRoute
 import com.mariomanhique.dokkhota.util.Constants.CATEGORY_ARG

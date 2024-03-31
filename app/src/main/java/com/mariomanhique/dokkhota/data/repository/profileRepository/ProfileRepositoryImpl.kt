@@ -7,10 +7,10 @@ import com.google.firebase.firestore.snapshots
 import com.google.firebase.firestore.toObject
 import com.mariomanhique.dokkhota.model.RequestState
 import com.mariomanhique.dokkhota.model.User
-import com.mariomanhique.dokkhota.model.UserData
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import com.mariomanhique.dokkhota.model.Result
+import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class ProfileRepositoryImpl @Inject constructor(
@@ -25,7 +25,7 @@ class ProfileRepositoryImpl @Inject constructor(
             if (user != null) {
                 rf.document(user.uid)
                     .snapshots()
-                    .collect { snapshot ->
+                    .map { snapshot ->
                         val userProfile = snapshot.toObject<User>()
                         if (userProfile != null) {
                             emit(Result.Success(userProfile))
