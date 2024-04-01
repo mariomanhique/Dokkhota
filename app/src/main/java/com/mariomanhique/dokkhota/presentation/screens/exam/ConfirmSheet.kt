@@ -6,17 +6,22 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.BottomSheetScaffold
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberBottomSheetScaffoldState
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableLongStateOf
@@ -47,7 +52,6 @@ fun ConfirmSheet(
     examsViewModel: ExamsListViewModel = hiltViewModel()
 ){
 
-//    val examUiState by examsViewModel.examUiState.collectAsStateWithLifecycle()
     val exam = examsViewModel.examDetails.collectAsStateWithLifecycle().value
 
     var totalTime by remember {
@@ -61,8 +65,6 @@ fun ConfirmSheet(
     var description2 by remember {
         mutableStateOf("")
     }
-
-    Log.d("ExamDetail", "ConfirmSheet: $exam ")
 
 
     when(exam){
@@ -82,16 +84,19 @@ fun ConfirmSheet(
 
     }
 
+    val sheetState= rememberModalBottomSheetState()
+    val scaffoldState = rememberBottomSheetScaffoldState()
+
 
     ModalBottomSheet(
         modifier = Modifier
-            .fillMaxSize()
-            .heightIn(max = Int.MAX_VALUE.dp),
+            .fillMaxSize(),
+        sheetState = sheetState,
+        windowInsets = WindowInsets(0.dp,0.dp,0.dp,40.dp),
         onDismissRequest = {
             onSheetDismissed()
         },
     ) {
-        Box {
 
             Column(
                 modifier = Modifier
@@ -104,7 +109,7 @@ fun ConfirmSheet(
                 Text(
                     text = description,
                     style = MaterialTheme.typography.titleLarge.copy(
-                        fontSize = 20.sp,
+                        fontSize = 18.sp,
                         textAlign = TextAlign.Center
                     ),
                 )
@@ -115,7 +120,7 @@ fun ConfirmSheet(
 
                 Text(text = "1.0 marks per question and 0.5 will be deducted for wrong answers")
 
-                Spacer(modifier = Modifier.height(30.dp))
+                Spacer(modifier = Modifier.height(20.dp))
 
                 Text(text = "Syllabus")
                 Spacer(modifier = Modifier.height(10.dp))
@@ -123,7 +128,7 @@ fun ConfirmSheet(
                     text = category.replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.ROOT) else it.toString() } +
                             " - 0$examN - $description2",
                     style = MaterialTheme.typography.titleLarge.copy(
-                        fontSize = 18.sp,
+                        fontSize = 17.sp,
                         color = Color.Gray,
                         textAlign = TextAlign.Center
                     ),
@@ -158,10 +163,8 @@ fun ConfirmSheet(
                     color = Color.Red,
                     text = "Cancel"
                 )
+                Spacer(modifier = Modifier.height(10.dp))
             }
 
         }
-
-    }
-
 }

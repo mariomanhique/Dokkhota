@@ -42,13 +42,11 @@ class ExamsListViewModel @Inject constructor(
                     getExamDetails(
                         examNr = userData.examNumber,
                         category = category.toString().lowercase(),
-                    )
-                }
+                )
+            }
         }
 
     }
-
-
 
    suspend fun setExamNr(number: String){
        userDataRepository.setExamNr(
