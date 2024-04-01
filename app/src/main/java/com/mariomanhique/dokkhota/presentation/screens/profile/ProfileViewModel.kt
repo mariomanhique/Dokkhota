@@ -39,32 +39,39 @@ class ProfileViewModel @Inject constructor(
                             initialValue = Result.Loading
                         )
 
-//    init {
-//        getCurrentUser()
-//    }
-//    private fun getCurrentUser(){
-//        viewModelScope.launch {
-//            profileRepository.getProfile().collect{user->
-//                user.let {
-//                   fetchImageFromFirebase(
-//                       remoteImagePath = it,
-//                       onImageDownload = {downloadedImage->
-//                           profileState.addImageProfile(
-//                               GalleryImage(
-//                                   image = downloadedImage,
-//                                   remoteImagePath = extractImagePath(
-//                                       fullImageUrl = downloadedImage.toString()
-//                                   )
-//                               )
-//                           )
-//                       },
-//                       onImageDownloadFailed = {}
-//                   )
-//                   _userData.value = it
-//               }
-//            }
-//        }
-//    }
+    init {
+        getCurrentUser()
+    }
+    private fun getCurrentUser(){
+        viewModelScope.launch {
+            profileRepository.getProfile().collect{user->
+                user.let {
+                    when(it){
+                        is Result.Success -> {
+                            fetchImageFromFirebase(
+                                remoteImagePath = it.data.profilePictureUrl.toString(),
+                                onImageDownload = {downloadedImage->
+                                    profileState.addImageProfile(
+                                        GalleryImage(
+                                            image = downloadedImage,
+                                            remoteImagePath = extractImagePath(
+                                                fullImageUrl = downloadedImage.toString()
+                                            )
+                                        )
+                                    )
+                                },
+                                onImageDownloadFailed = {}
+                            )
+                        }
+                        else ->{
+
+                        }
+                    }
+                   _userData.value = it
+               }
+            }
+        }
+    }
 
     fun addImage(
         image: Uri,

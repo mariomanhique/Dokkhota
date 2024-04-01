@@ -79,6 +79,7 @@ fun NavHost(
 
 
         profileRoute(
+           profileViewModel = profileViewModel,
             navigateToSignIn = navController::navigateToSignIn,
             paddingValues = paddingValues
         )

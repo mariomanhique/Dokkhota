@@ -31,11 +31,9 @@ import com.mariomanhique.dokkhota.presentation.components.EmptyPage
 fun ProfileScreen(
     modifier: Modifier = Modifier,
     navigateToSignIn: () -> Unit,
-    profileViewModel: ProfileViewModel = hiltViewModel(),
+    profileViewModel: ProfileViewModel,
     paddingValues: PaddingValues
 ){
-
-
 
     val userData = profileViewModel.profile.collectAsStateWithLifecycle().value
 
