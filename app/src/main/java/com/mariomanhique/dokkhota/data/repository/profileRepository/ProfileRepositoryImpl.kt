@@ -1,5 +1,6 @@
 package com.mariomanhique.dokkhota.data.repository.profileRepository
 
+import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FirebaseFirestoreException
@@ -10,6 +11,7 @@ import com.mariomanhique.dokkhota.model.User
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import com.mariomanhique.dokkhota.model.Result
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
@@ -20,26 +22,26 @@ class ProfileRepositoryImpl @Inject constructor(
     private lateinit var updateUser: RequestState<String>
 
     override fun getProfile(): Flow<Result<User>> {
-        return flow {
-            val user = FirebaseAuth.getInstance().currentUser
-            if (user != null) {
+        val user = FirebaseAuth.getInstance().currentUser
+        return if (user != null) {
                 rf.document(user.uid)
                     .snapshots()
                     .map { snapshot ->
                         val userProfile = snapshot.toObject<User>()
                         if (userProfile != null) {
-                            emit(Result.Success(userProfile))
+                            Log.d("Profile", "getProfile: $userProfile")
+                            Result.Success(userProfile)
                         } else {
                             // Emit a default User object if snapshot is null
-                            emit(Result.Error(FirebaseFirestoreException("User Is Null",FirebaseFirestoreException.Code.NOT_FOUND)))
+                           Result.Error(FirebaseFirestoreException("User Is Null",FirebaseFirestoreException.Code.NOT_FOUND))
                         }
                     }
             } else {
                 // Emit a default User object if user is null
-                emit(Result.Error())
+                flowOf(value = Result.Error())
             }
         }
-    }
+
 
 
     override fun updateImageProfile(imageUrl: String): RequestState<String> {
